@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :attempts
   has_many :attempt_choices
   belongs_to :team, optional: true
-   validates_presence_of     :username # required
+   validates_presence_of     :username, format: { with: /\A[a-zA-Z0-9\s]+\z/i, message: "can only contain letters and numbers." } # required
    validates_uniqueness_of   :username # required
    validate :email_domain
 
