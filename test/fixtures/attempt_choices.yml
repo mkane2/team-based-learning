@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  attempts: one
+  questions: one
+  choices: one
+  user: one
+  team: one
+
+two:
+  attempts: two
+  questions: two
+  choices: two
+  user: two
+  team: two

@@ -1,0 +1,28 @@
+Rails.application.routes.draw do
+
+  resources :enrollments
+  resources :attempt_choices
+  resources :teams, param: :name
+
+  devise_for :users, :controllers => { registrations: 'registrations' }
+  resources :users, param: :name
+
+  get 'users/index'
+  root 'users#index'
+  resources :quizzes do
+    resources :questions
+    resources :attempts
+  end
+  resources :questions do
+    resources :choices
+  end
+  resources :courses
+  resources :memberships
+
+  get 'quiz/:id/leaderboard', to: 'quizzes#leaderboard', as: 'leaderboard'
+
+  get 'add_member', to: 'memberships#add_member'
+  get 'admin_dashboard', to: 'users#admin_dashboard'
+  get 'dashboard', to: 'users#dashboard'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+end

@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-sm">
+      <div class="jumbotron">
+        <h2>Team based learning funstravaganza</h2>
+      </div>
+      <% if user_signed_in? %>
+
+        <h3><%= current_user.team.name if current_user.team.present? %></h3>
+        <h4><%= link_to current_user.username, dashboard_path %></h4>
+        <h5>past performance</h5>
+
+        <% if current_user.admin? %>
+          <%= link_to "Super Secret Admin Dashboard", admin_dashboard_path, class: 'btn btn-primary' %>
+          <%= link_to "Create New Course", new_course_path, class: 'btn btn-primary' %>
+          <%= link_to "Create New Quiz", new_quiz_path, class: 'btn btn-primary' %>
+          <hr />
+          <% if current_user.courses.any? %>
+            <ul class="list-group">
+              <li class="list-group-item">My courses</li>
+              <% current_user.courses.each do |course| %>
+                <li class="list-group-item"><%= link_to course.name, course_path(course) %></li>
+              <% end %>
+            </ul>
+          <% end %>
+
+        <% end %>
+        <hr />
+        <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to "Login", new_user_session_path, class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+</div>

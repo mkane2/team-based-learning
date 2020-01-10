@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Attempts:</strong>
+  <%= @attempt_choice.attempts %>
+</p>
+
+<p>
+  <strong>Questions:</strong>
+  <%= @attempt_choice.questions %>
+</p>
+
+<p>
+  <strong>Choices:</strong>
+  <%= @attempt_choice.choices %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @attempt_choice.user %>
+</p>
+
+<p>
+  <strong>Team:</strong>
+  <%= @attempt_choice.team %>
+</p>
+
+<%= link_to 'Edit', edit_attempt_choice_path(@attempt_choice) %> |
+<%= link_to 'Back', attempt_choices_path %>

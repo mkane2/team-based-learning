@@ -1,0 +1,31 @@
+<h1><%= @quiz.name %>:
+  <small class="text-muted">
+    <% if @results.present? %>
+      My results
+    <% elsif @attempt.team_attempt? %>
+      Team attempt
+    <% else %>
+      Individual attempt
+    <% end %>
+  </small>
+</h1>
+<div class="confetti sticky-top"></div>
+
+<% if @results.present? %>
+  <h3 class="alert alert-success sticky-top">My points: <%= %> | Team points: <%= @attempt.points %></h3>
+<% elsif @attempt.team_attempt? %>
+  <h3 id="points" class="alert alert-success sticky-top"><%= pluralize @attempt.points, 'Points' %></h3>
+<% else %>
+  <h3 class="alert alert-success sticky-top"><%= pluralize @points_possible, 'Points' %> possible</h3>
+<% end %>
+
+<%= render 'form', attempt: @attempt %>
+
+<div class="text-center">
+  <% if @attempt.team_attempt? %>
+    <%= link_to "Quiz Leaderboard", leaderboard_path(@quiz), class: "btn btn-lg btn-primary" %>
+    <%= link_to "View My Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-lg btn-primary" %>
+  <% else %>
+    <%= link_to "Start Team Quiz", quiz_path(@quiz), class: "btn btn-lg btn-primary" %>
+  <% end %>
+</div>
