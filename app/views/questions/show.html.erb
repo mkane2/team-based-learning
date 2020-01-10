@@ -13,7 +13,7 @@
   <ol type="A" >
     <% @question.choices.each do |c| %>
       <li class="<%= 'text-success' if c.correct?%>" >
-        <%= c.body %>
+        <%= c.choice_body %>
       </li>
     <% end %>
   </ol>

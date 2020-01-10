@@ -11,7 +11,7 @@
           </div>
           <div class="card-body">
               <% question.choices.each_with_index do |choice, index| %>
-                <p class="<%= 'text-success' if choice.correct? %>"><%= index +1 %>. <%= choice.body %></p>
+                <p class="<%= 'text-success' if choice.correct? %>"><%= index +1 %>. <%= choice.choice_body %></p>
               <% end %>
             <%= link_to 'Show', question, class: "btn btn-sm btn-info" %>
             <%= link_to 'Edit', edit_question_path(question), class: "btn btn-sm btn-info" %>

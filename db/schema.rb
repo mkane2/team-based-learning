@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200109223529) do
+ActiveRecord::Schema.define(version: 20200110024640) do
 
   create_table "attempt_choices", force: :cascade do |t|
     t.integer "attempt_id"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20200109223529) do
   end
 
   create_table "choices", force: :cascade do |t|
-    t.text "body"
+    t.text "choice_body"
     t.boolean "correct"
     t.integer "quiz_id"
     t.datetime "created_at", null: false
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20200109223529) do
     t.boolean "admin"
     t.string "username"
     t.integer "team_id"
+    t.integer "studentid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["team_id"], name: "index_users_on_team_id"

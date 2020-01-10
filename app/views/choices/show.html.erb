@@ -2,12 +2,7 @@
 
 <p>
   <strong>Body:</strong>
-  <%= @choice.body %>
-</p>
-
-<p>
-  <strong>Correct:</strong>
-  <%= @choice.correct %>
+  <%= @choice.choice_body %>
 </p>
 
 <p>
@@ -15,5 +10,7 @@
   <%= @choice.quiz %>
 </p>
 
+<% unless current_user.admin? %>
 <%= link_to 'Edit', edit_choice_path(@choice) %> |
 <%= link_to 'Back', choices_path %>
+<% end %>
