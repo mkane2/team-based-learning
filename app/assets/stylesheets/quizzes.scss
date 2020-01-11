@@ -2,15 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-table {
+.counter-table  {
     counter-reset: rowNumber;
 }
 
-table tr {
+.counter-table  tr {
     counter-increment: rowNumber;
 }
 
-table tr td:first-child::before {
+.counter-table  tr td:first-child::before {
     content: counter(rowNumber);
     min-width: 1em;
     margin-right: 0.5em;

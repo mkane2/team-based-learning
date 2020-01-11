@@ -24,7 +24,7 @@
 <hr />
   <% if @quiz.questions.exists? %>
     <h5><%= pluralize @quiz.questions.size - 1, 'Question' %> in this quiz</h5>
-    <table class="table">
+    <table class="counter-table table">
       <tbody>
       <ol>
         <% @quiz.questions.each do |q| %>

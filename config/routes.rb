@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'admin/csv_template'
+  get 'admin/generate_csv'
+  get 'admin/download_csv'
+
   resources :enrollments
   resources :attempt_choices
   resources :teams, param: :name
@@ -22,7 +26,9 @@ Rails.application.routes.draw do
   get 'quiz/:id/leaderboard', to: 'quizzes#leaderboard', as: 'leaderboard'
 
   get 'add_member', to: 'memberships#add_member'
-  get 'admin_dashboard', to: 'users#admin_dashboard'
+  get 'admin_dashboard', to: 'admin#dashboard'
   get 'dashboard', to: 'users#dashboard'
+  # get 'download', to: 'admin#download'
+  match '/download' => 'admin#index', via: :get, defaults: { format: :csv }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -6,7 +6,7 @@
     <%= link_to "Create Quiz", new_quiz_path, class: 'btn btn-lg btn-info' %>
 
 <h5>User attributes</h5>
-<table class="table">
+<table class="table table-bordered">
   <tr>
     <% @user_attributes.each do |attr| %>
       <td>
@@ -17,7 +17,7 @@
 </table>
 
 <h5>Quiz attributes</h5>
-<table class="table">
+<table class="table table-bordered">
   <tr>
     <% @quiz_attributes.each do |attr| %>
       <td>
@@ -27,8 +27,8 @@
   </tr>
 </table>
 
-<h5>Question attributes</h5>
-<table class="table">
+<h5>Question attributes <small class="text-muted"><%= @choice_attributes.to_sentence.html_safe %> may be repeated as many times as necessary</small></h5>
+<table class="table table-bordered">
   <tr>
     <% @question_attributes.each do |attr| %>
       <td>
