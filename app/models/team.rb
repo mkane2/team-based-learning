@@ -4,7 +4,8 @@ class Team < ApplicationRecord
   has_many :attempt_choices
   has_many :attempts
 
-  validates :name, format: { with: /\A[a-zA-Z0-9\s]+\z/i, message: "can only contain letters and numbers." }, uniqueness: true
+  validates :name, format: { with: /\A[a-zA-Z0-9\s]+\z/i, message: " %{value} can only contain letters and numbers." }
+  validates_uniqueness_of :name, {message: "%{value} has already been taken."}
 
   def self.batch_import(file)
     require 'csv'

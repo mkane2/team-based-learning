@@ -12,7 +12,7 @@ class QuizzesController < ApplicationController
   end
 
   def import
-    @errors = Quiz.batch_import(params[:file])
+    @errors = Quiz.batch_import(params[:file], current_user.id)
     if @errors.empty?
       redirect_to admin_dashboard_path, notice: "Quizzes successfully imported."
     else

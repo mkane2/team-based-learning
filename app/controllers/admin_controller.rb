@@ -15,7 +15,12 @@ class AdminController < ApplicationController
   end
 
   def upload_create(model)
-    model.constantize.batch_import(params[:file])
+    if model == 'quiz'
+      puts "upload_create(quiz)"
+      Quiz.batch_import(params[:file], current_user.id)
+    else
+      model.constantize.batch_import(params[:file])
+    end
     redirect_to admin_dashboard_path, notice: "#{[:model].capitalize} successfully imported"
   end
 
@@ -182,8 +187,8 @@ class AdminController < ApplicationController
       @quizzes = Quiz.all
       @quiz_attributes = []
       @quizzes.each_with_index do |quiz, index|
-        @quiz_attributes << "#{quiz.id}: Ind #{quiz.name}"
-        @quiz_attributes << "#{quiz.id}: Team #{quiz.name}"
+        @quiz_attributes << "#{quiz.id}: Ind #{quiz.name} Max pts: #{quiz.questions.count}"
+        @quiz_attributes << "#{quiz.id}: Team #{quiz.name} Max pts: #{quiz.choices.count}"
       end
 
       @header_line = just_user_attributes + @quiz_attributes
@@ -229,13 +234,95 @@ class AdminController < ApplicationController
       @filename
     elsif model == 'team'
       @filename = "tbl-team-results.csv"
-      CSV.generate_line just_team_attributes
+      @teams = Team.all
+
+      @quizzes = Quiz.all
+      @quiz_attributes = []
+      @quizzes.each_with_index do |quiz, index|
+        @quiz_attributes << "#{quiz.id}: Team #{quiz.name} Max pts: #{quiz.choices.count}"
+      end
+
+      @header_line = just_team_attributes + @quiz_attributes
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << @header_line
+      end
+
+      @teams.each do |team|
+        @team_attributes = []
+        @team_attributes << "#{team.name}"
+
+        @quiz_attributes = []
+        @quizzes.each do |quiz|
+          if Attempt.where(quiz_id: quiz.id, team_id: team.id, team_attempt: true).present?
+            @quiz_attributes << Attempt.where(quiz_id: quiz.id, team_id: team.id, team_attempt: true).first.points
+          else
+            @quiz_attributes << ""
+          end
+        end
+        @team_attributes = @team_attributes + @quiz_attributes
+        @csv = CSV.open(@filename, "ab") do |csv|
+          csv << @team_attributes
+        end
+      end
+
+      @filename
     elsif model == 'quiz'
       @filename = "tbl-quiz-results.csv"
-      CSV.generate_line just_quiz_attributes
+
+      @scores = []
+      @scores << "Average score"
+      @scores << "Best individual score"
+      @scores << "Worst individual score"
+      @scores << "Best team score"
+      @scores << "Worst team score"
+
+      @header_line = just_quiz_attributes + @scores
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << @header_line
+      end
+
+      @quizzes = Quiz.all
+      @quizzes.each do |q|
+        @q = []
+        @q << "#{q.name}"
+        @q << "--"
+        @q << "#{q.course_id}: #{q.course.name}"
+        @q << "#{q.due_date}"
+        @q << "#{q.randomize_questions}"
+        @q << "#{q.randomize_answers}"
+        @q << "#{q.show_all_questions}"
+        @q << "#{q.active}"
+        @q << "Average"
+
+        if q.attempts.where(team_attempt:false).present?
+          @q << "#{q.attempts.where(team_attempt:false).order(points: :desc).first.points}: #{q.attempts.where(team_attempt:false).order(points: :desc).first.user.username}"
+        else
+          @q << ""
+        end
+        if q.attempts.where(team_attempt:false).present?
+          @q << "#{q.attempts.where(team_attempt:false).order(points: :asc).first.points}: #{q.attempts.where(team_attempt:false).order(points: :asc).first.user.username}"
+        else
+          @q << ""
+        end
+        if q.attempts.where(team_attempt:true).present?
+          @q << "#{q.attempts.where(team_attempt:true).order(points: :desc).first.points}: #{q.attempts.where(team_attempt:true).order(points: :desc).first.team.name}"
+        else
+          @q << ""
+        end
+        if q.attempts.where(team_attempt:true).present?
+          @q << "#{q.attempts.where(team_attempt:true).order(points: :asc).first.points}: #{q.attempts.where(team_attempt:true).order(points: :asc).first.team.name}"
+        else
+          @q << ""
+        end
+
+        @csv = CSV.open(@filename, "ab") do |csv|
+          csv << @q
+        end
+      end
+
+      @filename
     elsif model == 'question'
-      @filename = "tbl-questions-results.csv"
-      CSV.generate_line just_question_attributes
+
     end
   end
 end

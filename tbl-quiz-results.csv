@@ -1,0 +1,25 @@
+name,description,course_id,due_date,randomize_questions,randomize_answers,show_all_questions,active,Average score,Best individual score,Worst individual score,Best team score,Worst team score
+Unit 1 Quiz,--,1: Native American History,"",f,f,t,t,Average,0: jim,0: jim,0: Oka Warriors,0: Oka Warriors
+Unit 1 Quiz,--,1: Native American History,"",f,f,t,t,Average,0: jim,0: jim,0: Oka Warriors,0: Oka Warriors
+Unit 2 Quiz,--,1: Native American History,"",f,f,t,t,Average,3: jim,: Prof Kane,3: Oka Warriors,3: Oka Warriors
+Unit 3 Quiz,--,1: Native American History,"",f,f,t,t,Average,1: jim,: Prof Kane,3: Oka Warriors,3: Oka Warriors
+A Brand New Quiz,--,1: Native American History,"",f,f,t,t,Average,3: jim,: Prof Kane,6: Oka Warriors,6: Oka Warriors
+A new quiz,--,1: Native American History,"",f,f,t,t,Average,3: jim,0: Prof Kane,9: Oka Warriors,9: Oka Warriors
+Whyyyyy,--,1: Native American History,"",f,f,t,t,Average,0: Prof Kane,0: Prof Kane,7: Oka Warriors,7: Oka Warriors
+miar,--,1: Native American History,"",f,f,t,t,Average,1: jim,0: Prof Kane,1: Oka Warriors,1: Oka Warriors
+miar,--,1: Native American History,"",f,f,t,t,Average,1: jim,0: Prof Kane,1: Oka Warriors,1: Oka Warriors
+bad,--,1: Native American History,"",f,f,t,t,Average,1: jim,0: Prof Kane,1: Oka Warriors,1: Oka Warriors
+new,--,1: Native American History,"",f,f,t,t,Average,1: jim,0: Prof Kane,1: Oka Warriors,1: Oka Warriors
+one miar,--,1: Native American History,"",f,f,t,t,Average,7: jim,1: Prof Kane,6: Oka Warriors,6: Oka Warriors
+new,--,1: Native American History,"",f,f,t,t,Average,1: Prof Kane,0: jim,1: Oka Warriors,1: Oka Warriors
+A quiz with correct answer,--,1: Native American History,"",f,f,t,t,Average,11: Prof Kane,6: jim,10: Oka Warriors,10: Oka Warriors
+new quiz,--,1: Native American History,"",f,f,t,t,Average,4: jim,0: Prof Kane,5: Oka Warriors,3: The 1491s
+should not show,--,1: Native American History,"",f,f,t,t,Average,7: jim,0: Prof Kane,6: Oka Warriors,6: Oka Warriors
+a new test quiz,--,1: Native American History,"",f,f,t,t,Average,12: jim,4: Prof Kane,9: Oka Warriors,-5: The 1491s
+Another!,--,1: Native American History,"",f,f,t,t,Average,8: Prof Kane,8: Prof Kane,6: The 1491s,6: The 1491s
+one,--,1: Native American History,"",f,f,t,t,Average,4: Prof Kane,4: Prof Kane,2: The 1491s,2: The 1491s
+new,--,1: Native American History,"",f,f,t,t,Average,6: Prof Kane,6: Prof Kane,3: The 1491s,3: The 1491s
+last try try,--,1: Native American History,"",f,f,t,t,Average,2: Prof Kane,2: Prof Kane,2: The 1491s,2: The 1491s
+three,--,1: Native American History,"",f,f,t,t,Average,3: Prof Kane,3: Prof Kane,3: The 1491s,0: The 1491s
+many choices,--,1: Native American History,"",f,f,t,t,Average,2: Prof Kane,2: Prof Kane,5: The 1491s,5: The 1491s
+three point quiz,--,1: Native American History,"",f,f,t,t,Average,0: Prof Kane,0: Prof Kane,9: The 1491s,9: The 1491s
