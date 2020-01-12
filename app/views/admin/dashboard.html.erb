@@ -12,7 +12,7 @@
     <h5>User attributes
       <%= link_to "Download template", download_path(template: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
       <%= link_to "Upload users", '#', target: :_blank, class: "btn btn-sm btn-secondary" %>
-      <%= link_to "Download users and quiz results", '#', target: :_blank, class: "btn btn-sm btn-secondary" %>
+      <%= link_to "Download users and quiz results", download_path(download: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
     </h5>
   </div>
   <table class="table table-bordered">
@@ -32,6 +32,8 @@
         <td><%= user.username %></td>
         <td><%= user.team_id if user.team_id.present? %>: <%= user.team.name if user.team.present? %></td>
         <td><%= user.studentid %></td>
+        <td><%= user.firstname %></td>
+        <td><%= user.lastname %></td>
         <td> -- </td>
       </tr>
     <% end %>
@@ -75,6 +77,7 @@
           <%= attr %>
         </td>
       <% end %>
+      <td>Questions (not editable)</td>
       <td>Points (not editable)</td>
     </tr>
     <% @quizzes.each do |quiz| %>
@@ -84,6 +87,7 @@
         <td><%= truncate(quiz.description) %></td>
         <td><%= quiz.user_id %></td>
         <td><%= quiz.course_id %>: <%= quiz.course.name %></td>
+        <td><%= quiz.questions.count %></td>
         <td><%= quiz.questions.joins(:choices).count %></td>
       </tr>
     <% end %>
@@ -108,5 +112,12 @@
         </td>
       <% end %>
     </tr>
+    <% @questions.each do |q| %>
+      <tr>
+        <td><%= q.id %></td>
+        <td><%= truncate q.body %></td>
+        <td><%= q.quiz_id %>: <%= q.quiz.name %></td>
+      </tr>
+    <% end %>
   </table>
 </div>

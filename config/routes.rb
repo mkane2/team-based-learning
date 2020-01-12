@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
-  get 'admin/csv_template'
-  get 'admin/generate_csv'
-  get 'admin/download_csv'
+  #get 'admin/csv_template'
+  #get 'admin/generate_csv'
+  #get 'admin/download_csv'
 
   resources :enrollments
   resources :attempt_choices

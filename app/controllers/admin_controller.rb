@@ -8,6 +8,7 @@ class AdminController < ApplicationController
       @users = User.all
       @teams = Team.all
       @quizzes = Quiz.all
+      @questions = Question.all
     else
       redirect_to root_url
     end
@@ -55,6 +56,7 @@ class AdminController < ApplicationController
       @user_attributes = filter_word_out("^id", @user_attributes)
       @user_attributes = filter_word_out("encrypted", @user_attributes)
       @user_attributes = @user_attributes.push("password".html_safe)
+      # puts @user_attributes
   end
 
   def just_team_attributes
@@ -89,73 +91,151 @@ class AdminController < ApplicationController
     require 'csv'
     if model == 'user'
       @filename = "tbl-user-template.csv"
-      puts @filename
-      CSV.generate_line just_user_attributes
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << just_user_attributes
+      end
+      @filename
     elsif model == 'team'
       @filename = "tbl-team-template.csv"
-      CSV.generate_line just_team_attributes
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << just_team_attributes
+      end
+      @filename
     elsif model == 'quiz'
       @filename = "tbl-quiz-template.csv"
-      CSV.generate_line just_quiz_attributes
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << just_quiz_attributes
+      end
+      @filename
     elsif model == 'question'
-      @filename = "tbl-questions-template.csv"
-      CSV.generate_line just_question_attributes
+      @filename = "tbl-question-template.csv"
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << just_question_attributes
+      end
+      @filename
     end
   end
-
-  # def download
-  #   redirect_to admin_dashboard_path
-  # end
 
   def index
-    if params[:template].present?
-      if params[:user].present?
-        @download = csv_template('user')
-      elsif params[:team].present?
-        @download = csv_template('team')
-      elsif params[:quiz].present?
-        @download = csv_template('quiz')
-      elsif params[:question].present?
-        @download = csv_template('question')
+    if current_user.admin?
+      if params[:template].present?
+        if params[:user].present?
+          @download = csv_template('user')
+        elsif params[:team].present?
+          @download = csv_template('team')
+        elsif params[:quiz].present?
+          @download = csv_template('quiz')
+        elsif params[:question].present?
+          @download = csv_template('question')
+        else
+          redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
+        end
+      elsif params[:download].present?
+        if params[:user].present?
+          @download = download_csv('user')
+        elsif params[:team].present?
+          @download = download_csv('team')
+        elsif params[:quiz].present?
+          @download = download_csv('quiz')
+        elsif params[:question].present?
+          @download = download_csv('question')
+        else
+          redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
+        end
       else
-        redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
+        @filename = "error.csv"
       end
-    # elsif params[:generate].present?
-    #   if params[:user].present?
-    #     @download = csv_template('user')
-    #   elsif params[:team].present?
-    #     @download = csv_template('team')
-    #   elsif params[:quiz].present?
-    #     @download = csv_template('quiz')
-    #   elsif params[:question].present?
-    #     @download = csv_template('question')
-    #   else
-    #     redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
-    #   end
-    elsif params[:download].present?
-      if params[:user].present?
-        @download = download_csv('user')
-      elsif params[:team].present?
-        @download = download_csv('team')
-      elsif params[:quiz].present?
-        @download = download_csv('quiz')
-      elsif params[:question].present?
-        @download = download_csv('question')
-      else
-        redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
+
+      respond_to do |format|
+        format.csv { send_file @download, filename: @filename }
       end
     else
-      @filename = "error.csv"
+      redirect_to root_url
     end
-
-    respond_to do |format|
-      format.csv { send_data @download, filename: @filename }
-    end
-  end
-
-  def generate_csv
   end
 
   def download_csv(model)
+    require 'csv'
+    if model == 'user'
+      @filename = "tbl-user-results.csv"
+      @users = User.all
+
+      @quizzes = Quiz.all
+      @quiz_attributes = []
+      @quizzes.each_with_index do |quiz, index|
+        @quiz_attributes << "#{quiz.id}: Ind #{quiz.name}"
+        @quiz_attributes << "#{quiz.id}: Team #{quiz.name}"
+      end
+
+      @header_line = just_user_attributes + @quiz_attributes
+      @csv = CSV.open(@filename, "w") do |csv|
+        csv << @header_line
+      end
+
+      @users.each do |user|
+        @user_attributes = []
+        if user.team.present?
+          @team_name = user.team.name
+        else
+          ""
+        end
+        @user_attributes << "#{user.email}"
+        @user_attributes << "#{user.admin}"
+        @user_attributes << "#{user.username}"
+        @user_attributes << "#{user.team_id}"
+        @user_attributes << "#{@team_name}"
+        @user_attributes << "#{user.studentid}"
+        @user_attributes << "#{user.firstname}"
+        @user_attributes << "#{user.lastname}"
+
+        @quiz_attributes = []
+        @quizzes.each do |quiz|
+          if Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).present?
+            @quiz_attributes << Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).first.points
+          else
+            @quiz_attributes << "0"
+          end
+          if user.team.present? && Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).present?
+            @quiz_attributes << Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).first.points
+          else
+            @quiz_attributes << "0"
+          end
+        end
+        @user_attributes = @user_attributes + @quiz_attributes
+        @csv = CSV.open(@filename, "ab") do |csv|
+          csv << @user_attributes
+        end
+      end
+
+      @filename
+
+      #   @quiz_attributes = []
+      #   # @quizzes.each do |quiz|
+      #   #   if Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).present?
+      #   #     @quiz_attributes << Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).first.points
+      #   #   else
+      #   #     @quiz_attributes << "0"
+      #   #   end
+      #   #   if user.team.present? && Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).present?
+      #   #     @quiz_attributes << Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).first.points
+      #   #   else
+      #   #     @quiz_attributes << "0"
+      #   #   end
+      #   # end
+      #   @user_attributes = @user_attributes + @quiz_attributes
+      #   # CSV.open(@filename, "a") do |csv|
+      #   #   csv << @user_attributes
+      #   # end
+      # end
+    elsif model == 'team'
+      @filename = "tbl-team-results.csv"
+      CSV.generate_line just_team_attributes
+    elsif model == 'quiz'
+      @filename = "tbl-quiz-results.csv"
+      CSV.generate_line just_quiz_attributes
+    elsif model == 'question'
+      @filename = "tbl-questions-results.csv"
+      CSV.generate_line just_question_attributes
+    end
   end
 end
