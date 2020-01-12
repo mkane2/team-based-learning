@@ -1,14 +1,22 @@
 class AdminController < ApplicationController
   def dashboard
     if current_user.admin?
-      print_user_attributes
-      print_team_attributes
-      print_quiz_attributes
-      print_question_attributes
       @users = User.all
       @teams = Team.all
       @quizzes = Quiz.all
       @questions = Question.all
+      if @users.any?
+        print_user_attributes
+      end
+      if @teams.any?
+        print_team_attributes
+      end
+      if @quizzes.any?
+        print_quiz_attributes
+      end
+      if @questions.any?
+        print_question_attributes
+      end
     else
       redirect_to root_url
     end

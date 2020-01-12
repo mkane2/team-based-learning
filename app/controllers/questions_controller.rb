@@ -29,11 +29,6 @@ class QuestionsController < ApplicationController
   # POST /questions.json
   def create
     @question = Question.new(question_params)
-    # puts @question.id
-    # puts "butts"
-    # puts params[:question][:choices]
-    # @choice = Choice.new(question_id: @question.id, quiz_id: params[:question][:quiz_id])
-    # puts @choice.id
 
     respond_to do |format|
       if @question.save

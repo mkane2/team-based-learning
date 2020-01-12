@@ -8,10 +8,27 @@ class Question < ApplicationRecord
     require 'csv'
     questions = []
     errors = []
+    get_headers = CSV.read(file.path, headers: true)
+    headers = get_headers.headers
+    choice_count = 0
+    headers.each do |header|
+      if header.include? "choice_body"
+        choice_count += 1
+      end
+    end
+    puts "this many choices #{choice_count}"
     CSV.foreach(file.path, headers: true) do |row|
-      q = Question.new (row.to_h)
+      q = Question.new body: row['body'], quiz_id: row['quiz_id']
       if q.valid?
-        q = Question.create! (row.to_h)
+        q = Question.create! body: row['body'], quiz_id: row['quiz_id']
+         choice_count.times do |choice|
+           c = Choice.new quiz_id: row['quiz_id'], question_id: q.id, choice_body: row['choice_body_' + choice.to_s], correct: row['correct_' + choice.to_s]
+           if c.valid?
+             c = Choice.create! quiz_id: row['quiz_id'], question_id: q.id, choice_body: row['choice_body_' + choice.to_s], correct: row['correct_' + choice.to_s]
+           else
+             errors << c.errors.full_messages
+           end
+         end
       else
         errors << q.errors.full_messages
       end

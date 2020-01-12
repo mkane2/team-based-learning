@@ -5,9 +5,12 @@
 .btn-answer {
   position:relative;
     padding-top:20px;
-    display:inline-block !important;
+    // display:inline-block !important;
+    float: left;
+    margin-top: 5px;
+    max-width: 100%;
     padding-left: 40px !important;
-    // white-space: normal;
+    white-space: normal;
     text-align: left !important;
     margin-left: 15px !important;
   // overflow: visible;
@@ -17,7 +20,7 @@
 
 .response-wrapper {
   position:relative;
-  display:inline-block;
+  float: left;
 }
 
 .nowrap {

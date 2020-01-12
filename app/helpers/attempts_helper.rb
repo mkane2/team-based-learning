@@ -17,7 +17,7 @@ module AttemptsHelper
   def team_points(question)
     @total = question.choices.size
     @attempts = current_user.team.attempt_choices.where(question_id: question.id).count
-    @possible = @total - @attempts + 1
+    @possible = @total - @attempts
     @possible.to_s
   end
 

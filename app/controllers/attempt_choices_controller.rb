@@ -30,6 +30,12 @@ class AttemptChoicesController < ApplicationController
     @possible = @total - @attempts
   end
 
+  def team_points(question)
+    @total = question.choices.size + 1
+    @attempts = current_user.team.attempt_choices.where(question_id: question.id).size
+    @possible = @total - @attempts
+  end
+
   def create
     @user = User.find(params[:user_id])
     @team = @user.team
@@ -52,7 +58,7 @@ class AttemptChoicesController < ApplicationController
         format.json { render :show, status: :created, location: @attempt_choice }
         format.js
         if @choice.correct? && @attempt.team_attempt?
-          points = @attempt.points + points_possible(@question) + 1
+          points = @attempt.points + team_points(@question)
           @attempt.points = points
           @attempt.save
         elsif @choice.correct?
