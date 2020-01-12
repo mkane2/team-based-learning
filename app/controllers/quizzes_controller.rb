@@ -11,6 +11,11 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def import
+    Quiz.batch_import(params[:file])
+    redirect_to admin_dashboard_path, notice: "Quizzes successfully imported"
+  end
+
   # GET /quizzes/1
   # GET /quizzes/1.json
   def show

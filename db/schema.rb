@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200111215139) do
+ActiveRecord::Schema.define(version: 20200112053940) do
 
   create_table "attempt_choices", force: :cascade do |t|
     t.integer "attempt_id"
@@ -51,6 +51,20 @@ ActiveRecord::Schema.define(version: 20200111215139) do
     t.index ["quiz_id"], name: "index_choices_on_quiz_id"
   end
 
+  create_table "course_options", force: :cascade do |t|
+    t.boolean "randomize_questions", default: false
+    t.boolean "randomize_answers", default: false
+    t.boolean "show_all_questions", default: true
+    t.boolean "active", default: true
+    t.integer "duration"
+    t.integer "course_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_options_on_course_id"
+    t.index ["user_id"], name: "index_course_options_on_user_id"
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -77,16 +91,8 @@ ActiveRecord::Schema.define(version: 20200111215139) do
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
   end
 
-  create_table "quizzes", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "course_id"
-    t.index ["course_id"], name: "index_quizzes_on_course_id"
-    t.index ["user_id"], name: "index_quizzes_on_user_id"
-  end
+# Could not dump table "quizzes" because of following StandardError
+#   Unknown type 'bool' for column 'randomize_questions'
 
   create_table "teams", force: :cascade do |t|
     t.string "name"

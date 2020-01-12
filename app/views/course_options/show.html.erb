@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Randomize questions:</strong>
+  <%= @course_option.randomize_questions %>
+</p>
+
+<p>
+  <strong>Randomize answers:</strong>
+  <%= @course_option.randomize_answers %>
+</p>
+
+<p>
+  <strong>Show all questions:</strong>
+  <%= @course_option.show_all_questions %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @course_option.active %>
+</p>
+
+<p>
+  <strong>Duration:</strong>
+  <%= @course_option.duration %>
+</p>
+
+<p>
+  <strong>Course:</strong>
+  <%= @course_option.course %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @course_option.user %>
+</p>
+
+<%= link_to 'Edit', edit_course_option_path(@course_option) %> |
+<%= link_to 'Back', course_options_path %>

@@ -1,24 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails (5.1.2) app for running Team Based Learning quizzes, deployable by one person to Heroku.  Student scores are not visible except to logged-in users, but no guarantees are made about FERPA compliance.  Run at your own risk.
 
-Things you may want to cover:
+## Deployment instructions
 
-* Ruby version
+## Steps for running a course the first time
 
-* System dependencies
+## Common issues
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Contributing
+Pull requests are very welcome!  See the [Trello](https://trello.com/b/oyKJR0Eq/tbl) for the current to-do list.

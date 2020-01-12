@@ -71,6 +71,12 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def import
+    # this does not import the choices associated
+    Question.batch_import(params[:file])
+    redirect_to admin_dashboard_path, notice: "Questions successfully imported"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_question

@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
 
+  resources :course_options
   #get 'admin/csv_template'
   #get 'admin/generate_csv'
   #get 'admin/download_csv'
 
   resources :enrollments
   resources :attempt_choices
-  resources :teams, param: :name
+  resources :teams, param: :name do
+    collection {post :import}
+  end
 
   devise_for :users, :controllers => { registrations: 'registrations' }
   resources :users, param: :name do
@@ -19,9 +22,11 @@ Rails.application.routes.draw do
   resources :quizzes do
     resources :questions
     resources :attempts
+    collection {post :import}
   end
   resources :questions do
     resources :choices
+    collection {post :import}
   end
   resources :courses
   resources :memberships

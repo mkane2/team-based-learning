@@ -7,6 +7,11 @@ class TeamsController < ApplicationController
     @teams = Team.all
   end
 
+  def import
+    Team.batch_import(params[:file])
+    redirect_to admin_dashboard_path, notice: "Teams successfully imported"
+  end
+
   # GET /teams/1
   # GET /teams/1.json
   def show
