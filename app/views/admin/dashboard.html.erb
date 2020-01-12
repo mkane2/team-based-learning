@@ -11,20 +11,20 @@
   <div class="sticky-top alert alert-primary">
     <div class="row">
     <h5>User attributes</h5>
-    <div class="col-md-8 col-sm-12">
-      <%= link_to "Download template", download_path(template: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+      <div class="col-md-8 col-sm-8 d-sm-none d-md-block">
+        <%= link_to "Download template", download_path(template: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
 
-      <%= link_to "Download users and quiz results", download_path(download: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
-    </div>
-    <div class="col-md-2">
-      <%= form_tag import_users_path, multipart: true do %>
-        <%= file_field_tag :file, class: "form-control-file" %>
-        <%= submit_tag("Import users from file", class: "btn btn-secondary btn-sm") %>
-      <% end %>
-    </div>
+        <%= link_to "Download users and quiz results", download_path(download: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+      </div>
+      <div class="col-md-2 d-sm-none d-md-block">
+        <%= form_tag import_users_path, multipart: true do %>
+          <%= file_field_tag :file, class: "form-control-file" %>
+          <%= submit_tag("Import users from file", class: "btn btn-secondary btn-sm") %>
+        <% end %>
+      </div>
     </div>
   </div>
-  <table class="table table-bordered">
+  <table class="table table-bordered table-responsive">
     <tr>
         <td>ID (not editable)</td>
       <% @user_attributes.each do |attr| %>
@@ -51,9 +51,23 @@
 
 <div class="container-fluid">
   <div class="sticky-top alert alert-primary">
-      <h5>Team attributes <%= link_to "Download template", download_path(template: true, team: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %></h5>
+    <div class="row">
+      <h5>Team attributes</h5>
+      <div class="col-md-8 d-sm-none d-md-block">
+        <%= link_to "Download template", download_path(template: true, team: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+
+        <%= link_to "Download teams and quiz results", download_path(download: true, team: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+      </div>
+      <div class="col-md-2 d-sm-none d-md-block">
+        <%= form_tag import_teams_path, multipart: true do %>
+          <%= file_field_tag :file, class: "form-control-file" %>
+          <%= submit_tag("Import teams from file", class: "btn btn-secondary btn-sm") %>
+        <% end %>
+      </div>
+    </div>
+
   </div>
-  <table class="table table-bordered">
+  <table class="table table-bordered table-responsive">
     <tr>
       <td>ID (not editable)</td>
       <% @team_attributes.each do |attr| %>
@@ -76,9 +90,21 @@
 
 <div class="container-fluid">
   <div class="sticky-top alert alert-primary">
-    <h5>Quiz attributes <%= link_to "Download template", download_path(template: true, quiz: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %></h5>
+    <div class="row">
+      <h5>Quiz attributes</h5>
+      <div class="col-md-8 d-sm-none d-md-block">
+        <%= link_to "Download template", download_path(template: true, quiz: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+        <%= link_to "Download quizzes and average results", download_path(download: true, quiz: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+      </div>
+      <div class="col-md-2 d-sm-none d-md-block">
+        <%= form_tag import_quizzes_path, multipart: true do %>
+          <%= file_field_tag :file, class: "form-control-file" %>
+          <%= submit_tag("Import quizzes from file", class: "btn btn-secondary btn-sm") %>
+        <% end %>
+      </div>
+    </div>
   </div>
-  <table class="table table-bordered">
+  <table class="table table-bordered table-responsive">
     <tr>
       <td>ID (not editable)</td>
       <% @quiz_attributes.each do |attr| %>
@@ -94,8 +120,12 @@
         <td><%= quiz.id %></td>
         <td><%= quiz.name %></td>
         <td><%= truncate(quiz.description) %></td>
-        <td><%= quiz.user_id %></td>
         <td><%= quiz.course_id %>: <%= quiz.course.name %></td>
+        <td><%= quiz.due_date %></td>
+        <td><%= quiz.randomize_questions %></td>
+        <td><%= quiz.randomize_answers %></td>
+        <td><%= quiz.show_all_questions %></td>
+        <td><%= quiz.active %></td>
         <td><%= quiz.questions.count %></td>
         <td><%= quiz.questions.joins(:choices).count %></td>
       </tr>
@@ -105,9 +135,21 @@
 
 <div class="container-fluid">
   <div class="sticky-top alert alert-primary">
-    <h5>Question attributes <%= link_to "Download template", download_path(template: true, question: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %> <small class="text-muted"><%= @choice_attributes.to_sentence.html_safe %> may be repeated as many times as necessary</small></h5>
+    <div class="row">
+      <h5>Question attributes <small class="text-muted"><%= @choice_attributes.to_sentence.html_safe %> may be repeated as many times as necessary</small></h5>
+      <div class="col-md-8 d-sm-none d-md-block">
+        <%= link_to "Download template", download_path(template: true, question: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+      </div>
+      <div class="col-md-2 d-sm-none d-md-block">
+        <%= form_tag import_questions_path, multipart: true do %>
+          <%= file_field_tag :file, class: "form-control-file" %>
+          <%= submit_tag("Import questions from file", class: "btn btn-secondary btn-sm") %>
+        <% end %>
+      </div>
+    </div>
+
   </div>
-  <table class="table table-bordered">
+  <table class="table table-bordered table-responsive">
     <tr>
       <td>ID (not editable)</td>
       <% @question_attributes.each do |attr| %>

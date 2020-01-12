@@ -40,6 +40,7 @@ class AdminController < ApplicationController
     @quiz_attributes = Quiz.columns.collect { |c| "<strong>#{c.name}:</strong> #{c.type}".html_safe }
       @quiz_attributes = filter_word_out("_at", @quiz_attributes)
       @quiz_attributes = filter_word_out("g>id", @quiz_attributes)
+      @quiz_attributes = filter_word_out("user_id", @quiz_attributes)
   end
 
   def print_question_attributes
@@ -74,6 +75,7 @@ class AdminController < ApplicationController
     @quiz_attributes = Quiz.columns.collect { |c| "#{c.name}" }
       @quiz_attributes = filter_word_out("_at", @quiz_attributes)
       @quiz_attributes = filter_word_out("^id", @quiz_attributes)
+      @quiz_attributes = filter_word_out("user_id", @quiz_attributes)
   end
 
   def just_question_attributes
