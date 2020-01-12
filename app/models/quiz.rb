@@ -9,9 +9,16 @@ class Quiz < ApplicationRecord
 
   def self.batch_import(file)
     require 'csv'
-    users = []
+    quizzes = []
+    errors = []
     CSV.foreach(file.path, headers: true) do |row|
-      Quiz.create!(row.to_h)
+      q = Quiz.new (row.to_h)
+      if q.valid?
+        q = Quiz.create! (row.to_h)
+      else
+        errors << q.errors.full_messages
+      end
     end
+    errors
   end
 end

@@ -8,9 +8,16 @@ class Team < ApplicationRecord
 
   def self.batch_import(file)
     require 'csv'
-    users = []
+    teams = []
+    errors = []
     CSV.foreach(file.path, headers: true) do |row|
-      Team.create!(row.to_h)
+      team = Team.new (row.to_h)
+      if team.valid?
+        team = Team.create! (row.to_h)
+      else
+        errors << team.errors.full_messages
+      end
     end
+    errors
   end
 end

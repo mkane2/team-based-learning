@@ -16,7 +16,12 @@ class UsersController < ApplicationController
   end
 
   def import
-    User.batch_import(params[:file])
-    redirect_to admin_dashboard_path, notice: "Users successfully imported"
+    @errors = User.batch_import(params[:file])
+    if @errors.empty?
+      redirect_to admin_dashboard_path, notice: "Users successfully imported."
+    else
+      redirect_to admin_dashboard_path, notice: "#{@errors.join(", ")}"
+    end
   end
+  
 end

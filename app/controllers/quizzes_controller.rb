@@ -12,8 +12,12 @@ class QuizzesController < ApplicationController
   end
 
   def import
-    Quiz.batch_import(params[:file])
-    redirect_to admin_dashboard_path, notice: "Quizzes successfully imported"
+    @errors = Quiz.batch_import(params[:file])
+    if @errors.empty?
+      redirect_to admin_dashboard_path, notice: "Quizzes successfully imported."
+    else
+      redirect_to admin_dashboard_path, notice: "#{@errors.join(", ")}"
+    end
   end
 
   # GET /quizzes/1

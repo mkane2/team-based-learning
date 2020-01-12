@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     collection {post :import}
   end
 
-  get 'users/import' => 'admin#upload_create_users'
+  get '/import/:model' => 'admin#upload_create'
   get 'users/index'
   root 'users#index'
   resources :quizzes do

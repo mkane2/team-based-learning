@@ -12,21 +12,30 @@ class User < ApplicationRecord
   has_many :attempt_choices
   belongs_to :team, optional: true
    validates_presence_of     :username, format: { with: /\A[a-zA-Z0-9\s]+\z/i, message: "can only contain letters and numbers." } # required
-   validates_uniqueness_of   :username # required
+   validates_uniqueness_of   :username, message: "%{value} is already taken" # required
    validate :email_domain
+   validates_uniqueness_of :email, message: "%{value} is already taken"
 
    def email_domain
      domain = email.split("@").last
      if !email.blank?
-       errors.add(:email, "Invalid Domain") if domain != "albany.edu"
+       errors.add(:email, "Invalid email domain") if domain != "albany.edu"
      end
    end
 
    def self.batch_import(file)
      require 'csv'
      users = []
+     errors = []
      CSV.foreach(file.path, headers: true) do |row|
-       User.create!(row.to_h)
+       user = User.new (row.to_h)
+       if user.valid?
+         user = User.create! (row.to_h)
+       else
+         errors << user.errors.full_messages
+       end
      end
+     errors
    end
+
 end

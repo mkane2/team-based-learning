@@ -72,9 +72,12 @@ class QuestionsController < ApplicationController
   end
 
   def import
-    # this does not import the choices associated
-    Question.batch_import(params[:file])
-    redirect_to admin_dashboard_path, notice: "Questions successfully imported"
+    @errors = Question.batch_import(params[:file])
+    if @errors.empty?
+      redirect_to admin_dashboard_path, notice: "Questions successfully imported."
+    else
+      redirect_to admin_dashboard_path, notice: "#{@errors.join(", ")}"
+    end
   end
 
   private

@@ -8,8 +8,12 @@ class TeamsController < ApplicationController
   end
 
   def import
-    Team.batch_import(params[:file])
-    redirect_to admin_dashboard_path, notice: "Teams successfully imported"
+    @errors = Team.batch_import(params[:file])
+    if @errors.empty?
+      redirect_to admin_dashboard_path, notice: "Teams successfully imported."
+    else
+      redirect_to admin_dashboard_path, notice: "#{@errors.join(", ")}"
+    end
   end
 
   # GET /teams/1

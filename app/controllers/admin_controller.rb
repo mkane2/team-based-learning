@@ -14,15 +14,9 @@ class AdminController < ApplicationController
     end
   end
 
-  def upload_create_users
-    User.batch_import(params[:file])
-    redirect_to admin_dashboard_path, notice: "Users successfully imported"
-    # require 'csv'
-    # csv_text = File.read(@filename)
-    # csv = CSV.foreach(csv_text, headers: true)
-    # csv.each do |row|
-    #   model.constantize.create!(row.to_hash)
-    # end
+  def upload_create(model)
+    model.constantize.batch_import(params[:file])
+    redirect_to admin_dashboard_path, notice: "#{[:model].capitalize} successfully imported"
   end
 
   def print_user_attributes

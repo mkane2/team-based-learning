@@ -6,9 +6,16 @@ class Question < ApplicationRecord
 
   def self.batch_import(file)
     require 'csv'
-    users = []
+    questions = []
+    errors = []
     CSV.foreach(file.path, headers: true) do |row|
-      Question.create!(row.to_h)
+      q = Question.new (row.to_h)
+      if q.valid?
+        q = Question.create! (row.to_h)
+      else
+        errors << q.errors.full_messages
+      end
     end
+    errors
   end
 end

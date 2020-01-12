@@ -17,7 +17,7 @@
       <%= link_to "Download users and quiz results", download_path(download: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
     </div>
     <div class="col-md-2">
-      <%= form_tag users_import_path, multipart: true do %>
+      <%= form_tag import_users_path, multipart: true do %>
         <%= file_field_tag :file, class: "form-control-file" %>
         <%= submit_tag("Import users from file", class: "btn btn-secondary btn-sm") %>
       <% end %>
