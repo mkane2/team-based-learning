@@ -9,8 +9,11 @@ Rails.application.routes.draw do
   resources :teams, param: :name
 
   devise_for :users, :controllers => { registrations: 'registrations' }
-  resources :users, param: :name
+  resources :users, param: :name do
+    collection {post :import}
+  end
 
+  get 'users/import' => 'admin#upload_create_users'
   get 'users/index'
   root 'users#index'
   resources :quizzes do

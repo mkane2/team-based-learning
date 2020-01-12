@@ -11,9 +11,16 @@
   <div class="sticky-top alert alert-primary">
     <h5>User attributes
       <%= link_to "Download template", download_path(template: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
-      <%= link_to "Upload users", '#', target: :_blank, class: "btn btn-sm btn-secondary" %>
+
       <%= link_to "Download users and quiz results", download_path(download: true, user: true, format: :csv), target: :_blank, class: "btn btn-sm btn-secondary" %>
+
     </h5>
+    <div class="form-inline">
+      <%= form_tag users_import_path, multipart: true do %>
+        <%= file_field_tag :file, class: "form-control-file" %>
+        <%= submit_tag("Import users from file", class: "btn btn-secondary btn-sm") %>
+      <% end %>
+    </div>
   </div>
   <table class="table table-bordered">
     <tr>

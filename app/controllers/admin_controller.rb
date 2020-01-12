@@ -14,6 +14,17 @@ class AdminController < ApplicationController
     end
   end
 
+  def upload_create_users
+    User.batch_import(params[:file])
+    redirect_to admin_dashboard_path, notice: "Users successfully imported"
+    # require 'csv'
+    # csv_text = File.read(@filename)
+    # csv = CSV.foreach(csv_text, headers: true)
+    # csv.each do |row|
+    #   model.constantize.create!(row.to_hash)
+    # end
+  end
+
   def print_user_attributes
     @user_attributes = User.columns.collect { |c| "<strong>#{c.name}:</strong> #{c.type}".html_safe }
       @user_attributes = filter_word_out("reset", @user_attributes)
@@ -142,6 +153,18 @@ class AdminController < ApplicationController
         else
           redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
         end
+      elsif params[:upload].present?
+        if params[:user].present?
+          upload_create('user')
+        elsif params[:team].present?
+          upload_create('team')
+        elsif params[:quiz].present?
+          upload_create('quiz')
+        elsif params[:question].present?
+          upload_create('question')
+        else
+          redirect_to admin_dashboard_path, notice: "Sorry, that doesn't exist."
+        end
       else
         @filename = "error.csv"
       end
@@ -193,12 +216,12 @@ class AdminController < ApplicationController
           if Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).present?
             @quiz_attributes << Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).first.points
           else
-            @quiz_attributes << "0"
+            @quiz_attributes << ""
           end
           if user.team.present? && Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).present?
             @quiz_attributes << Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).first.points
           else
-            @quiz_attributes << "0"
+            @quiz_attributes << ""
           end
         end
         @user_attributes = @user_attributes + @quiz_attributes
@@ -208,25 +231,6 @@ class AdminController < ApplicationController
       end
 
       @filename
-
-      #   @quiz_attributes = []
-      #   # @quizzes.each do |quiz|
-      #   #   if Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).present?
-      #   #     @quiz_attributes << Attempt.where(quiz_id: quiz.id, user_id: user.id, team_attempt: false).first.points
-      #   #   else
-      #   #     @quiz_attributes << "0"
-      #   #   end
-      #   #   if user.team.present? && Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).present?
-      #   #     @quiz_attributes << Attempt.where(quiz_id: quiz.id, team_id: user.team.id, team_attempt: true).first.points
-      #   #   else
-      #   #     @quiz_attributes << "0"
-      #   #   end
-      #   # end
-      #   @user_attributes = @user_attributes + @quiz_attributes
-      #   # CSV.open(@filename, "a") do |csv|
-      #   #   csv << @user_attributes
-      #   # end
-      # end
     elsif model == 'team'
       @filename = "tbl-team-results.csv"
       CSV.generate_line just_team_attributes

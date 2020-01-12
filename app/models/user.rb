@@ -15,12 +15,18 @@ class User < ApplicationRecord
    validates_uniqueness_of   :username # required
    validate :email_domain
 
-   acts_as_voter
-
    def email_domain
      domain = email.split("@").last
      if !email.blank?
        errors.add(:email, "Invalid Domain") if domain != "albany.edu"
+     end
+   end
+
+   def self.batch_import(file)
+     require 'csv'
+     users = []
+     CSV.foreach(file.path, headers: true) do |row|
+       User.create!(row.to_h)
      end
    end
 end
