@@ -8,14 +8,21 @@ module AttemptsHelper
   end
 
   def individual_points(question)
-    @total = question.choices.size
-    @attempts = current_user.attempt_choices.where(question_id: question.id).count
-    @possible = @total - @attempts + 1
-    @possible.to_s
+    if current_user.attempt_choices.where(question_id: question.id, team_id: nil).present?
+      @try = current_user.attempt_choices.where(question_id: question.id, team_id: nil).first
+      @choice = @try.choice
+      if @choice.correct?
+        1
+      else
+        0
+      end
+    else
+      0
+    end
   end
 
   def team_points(question)
-    @total = question.choices.size
+    @total = question.choices.count
     @attempts = current_user.team.attempt_choices.where(question_id: question.id).count
     @possible = @total - @attempts
     @possible.to_s

@@ -24,17 +24,20 @@ class CoursesController < ApplicationController
   # POST /courses
   # POST /courses.json
   def create
-    unless current_user.admin? return
-    @course = current_user.courses.new(course_params)
+    if current_user.admin?
+      @course = current_user.courses.new(course_params)
 
-    respond_to do |format|
-      if @course.save
-        format.html { redirect_to @course, notice: 'Course was successfully created.' }
-        format.json { render :show, status: :created, location: @course }
-      else
-        format.html { render :new }
-        format.json { render json: @course.errors, status: :unprocessable_entity }
+      respond_to do |format|
+        if @course.save
+          format.html { redirect_to @course, notice: 'Course was successfully created.' }
+          format.json { render :show, status: :created, location: @course }
+        else
+          format.html { render :new }
+          format.json { render json: @course.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_to root_url and return
     end
   end
 

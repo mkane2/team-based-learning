@@ -1,13 +1,37 @@
 <div class="row">
-    <div class="col-sm">
-      <div class="jumbotron">
-        <h2>Team based learning funstravaganza</h2>
-      </div>
-      <% if user_signed_in? %>
+    <div class="col-sm-12">
 
-        <h3><%= current_user.team.name if current_user.team.present? %></h3>
-        <h4><%= link_to current_user.username, dashboard_path %></h4>
-        <h5>past performance</h5>
+      <div class="jumbotron">
+        <% if user_signed_in? %>
+          <div class="row">
+            <div class="col-sm-11">
+              <h2><%= link_to current_user.username, dashboard_path %></h2>
+            </div>
+            <div class="col-sm-1">
+              <%= number_to_percentage my_average, precision: 0 %>
+            </div>
+          </div>
+
+          <hr />
+          <div class="row">
+              <div class="col-sm-11">
+                <h4>
+                  <% if current_user.team.present? %>
+                    <%= link_to current_user.team.name, team_path(current_user.team.name) %>
+                  <% end %>
+                </h4>
+              </div>
+              <div class="col-sm-1">
+                <%= number_to_percentage my_team_average, precision: 0 %>
+              </div>
+          </div>
+        <% else %>
+          <%= link_to "Login", new_user_session_path, class: 'btn btn-primary btn-lg btn-block' %>
+        <% end %>
+      </div>
+
+      <% if user_signed_in? %>
+        <%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>
 
         <% if current_user.admin? %>
           <%= link_to "Super Secret Admin Dashboard", admin_dashboard_path, class: 'btn btn-primary' %>
@@ -27,7 +51,7 @@
         <hr />
         <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
       <% else %>
-        <%= link_to "Login", new_user_session_path, class: 'btn btn-primary' %>
+
       <% end %>
     </div>
 </div>

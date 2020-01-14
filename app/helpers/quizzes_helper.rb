@@ -1,5 +1,17 @@
 module QuizzesHelper
 
+  def duedate_helper(quiz)
+    if quiz.due_date < Time.now.to_datetime
+      'btn-info disabled'
+    else
+      'btn-outline-info'
+    end
+  end
+
+  def duedate(quiz)
+    quiz.due_date.strftime("%A, %B %e at %l:%M%p")
+  end
+
   def progress_helper(quiz, team)
     @total = quiz.questions.size
     @team_attempt = quiz.attempts.where(team_id: team.id).first
@@ -18,7 +30,7 @@ module QuizzesHelper
     if progress_helper(quiz, team).to_f < 100
       'progress-bar-striped progress-bar-animated'
     else
-      
+
     end
   end
 
@@ -36,5 +48,14 @@ module QuizzesHelper
     total = quiz.questions.joins(:choices).size.to_f
     percent = score / total
     percent * 100
+  end
+
+  def my_results(quiz)
+    if quiz.attempts.where(user_id: current_user.id).where(team_id: nil).present? && quiz.attempts.where(team_id: current_user.team.id).present?
+      "#{quiz.attempts.where(user_id: current_user.id, team_attempt: false).first.points} /
+    #{number_to_percentage quiz.attempts.where(user_id: current_user.id, team_attempt: false).first.points.to_f / quiz.questions.count.to_f * 100, precision: 0}".to_s
+    else
+      "Team must complete quiz"
+    end
   end
 end

@@ -1,7 +1,7 @@
 <h1><%= @quiz.name %>:
   <small class="text-muted">
     <% if @results.present? %>
-      My results
+      Results
     <% elsif @attempt.team_attempt? %>
       Team attempt
     <% else %>
@@ -12,7 +12,7 @@
 <div class="confetti sticky-top"></div>
 
 <% if @results.present? %>
-  <h3 class="alert alert-success sticky-top">My points: <%= %> | Team points: <%= @attempt.points %></h3>
+  <h3 class="alert alert-success sticky-top">My points: <%= @individual_attempt.points %> (<%= number_to_percentage @individual_attempt.points.to_f / @quiz.questions.count.to_f * 100, precision: 0 %>) | Team points: <%= @team_attempt.points %> (<%= number_to_percentage @team_attempt.points.to_f / @points_possible.to_f * 100, precision: 0 %> )</h3>
 <% elsif @attempt.team_attempt? %>
   <h3 id="points" class="alert alert-success sticky-top"><%= pluralize @attempt.points, 'Points' %></h3>
 <% else %>
@@ -25,6 +25,8 @@
   <% if @attempt.team_attempt? %>
     <%= link_to "Quiz Leaderboard", leaderboard_path(@quiz), class: "btn btn-lg btn-primary" %>
     <%= link_to "View My Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-lg btn-primary" %>
+  <% elsif @quiz.due_date > Time.now %>
+    You can't take this team quiz yet.  Come back at <%= duedate(@quiz) %> to start the team quiz.
   <% else %>
     <%= link_to "Start Team Quiz", quiz_path(@quiz), class: "btn btn-lg btn-primary" %>
   <% end %>

@@ -20,8 +20,12 @@
 
   <div class="field">
     <div class="form-group">
-      <label class="col-form-label col-form-label-lg" for="inputLarge"><%= form.label :course_id %></label>
-        <%= form.text_field :course_id, id: :team_course_id, class: 'form-control form-control-lg' %>
+      <label class="col-form-label col-form-label-lg" for="quiz_course"><%= form.label :course %></label>
+      <%= form.select :course_id, id: :team_course, class: 'form-control' do %>
+      <% @courses.each do |c| %>
+        <%= content_tag(:option, c.name, value: c.id) %>
+      <% end %>
+    <% end %>
     </div>
   </div>
 

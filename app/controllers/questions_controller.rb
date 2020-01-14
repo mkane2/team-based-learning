@@ -4,10 +4,10 @@ class QuestionsController < ApplicationController
   # GET /questions
   # GET /questions.json
   def index
-    if current_user.admin?
+    if user_signed_in? && current_user.admin?
       @questions = Question.where(quiz_id: params[:quiz_id])
     else
-      redirect_to root_url
+      redirect_to root_url, notice: "Sorry, you have to sign in first."
     end
   end
 

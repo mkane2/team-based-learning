@@ -1,37 +1,4 @@
 <h1>Quizzes</h1>
 <%= link_to 'New Quiz', new_quiz_path, class: "btn btn-primary" if current_user.admin? %>
-<hr />
-<table class="counter-table table" >
-  <thead>
-    <th>Quiz</th>
-    <th>Description</th>
-    <th>My Score</th>
-    <th>Team Score</th>
-  </thead>
-  <tbody>
-    <% @quizzes.each do |quiz| %>
-      <tr>
-        <td><%= link_to quiz.name, quiz, class: "btn btn-sm btn-outline-primary" %></td>
-        <td><%= truncate quiz.description %></td>
-        <% if quiz.attempts.where(user_id: current_user.id).where(team_id: nil).present? && quiz.attempts.where(team_id: current_user.team.id).present? %>
-          <td><%= number_to_percentage individual_quiz_percent(quiz), precision: 0 %></td>
-        <% elsif quiz.attempts.where(user_id: current_user.id).where(team_id: nil).present? && quiz.attempts.where(team_id: current_user.team.id).empty? %>
-          <td>Team must complete quiz</td>
-        <% else %>
-          <td>Not started</td>
-        <% end %>
-        <% if quiz.attempts.where(team_id: current_user.team.id).present? %>
-          <td><%= number_to_percentage team_quiz_percent(quiz), precision: 0 %></td>
-          <% else %>
-            <td>Not started</td>
-        <% end %>
-        <% if current_user.admin? %>
-          <td><%= link_to 'Edit', edit_quiz_path(quiz) %></td>
-          <td><%= link_to 'Destroy', quiz, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
+<%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>

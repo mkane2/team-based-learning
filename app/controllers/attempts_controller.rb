@@ -10,13 +10,15 @@ class AttemptsController < ApplicationController
   # GET /attempts/1
   # GET /attempts/1.json
   def show
-    if params[:results].present? && current_user.team.attempts.where(quiz_id: params[:quiz_id]).present?
-      @results = true
-    end
     @quiz = Quiz.find(params[:quiz_id])
     @questions = @quiz.questions
     @choices = Choice.joins(:question).merge(@questions).uniq
     @points_possible = @choices.size
+    if params[:results].present? && current_user.team.attempts.where(quiz_id: params[:quiz_id]).present?
+      @results = true
+      @team_attempt = @quiz.attempts.where(team_attempt: true, team_id: current_user.team.id).first
+      @individual_attempt = @quiz.attempts.where(team_attempt: false, user_id: current_user.id).first
+    end
   end
 
   # GET /attempts/new
@@ -35,15 +37,10 @@ class AttemptsController < ApplicationController
     @user = current_user
     @team = current_user.team
     @quiz = Quiz.find(params[:quiz_id])
-    puts @team.id
     if params[:team].present?
       @attempt = Attempt.new(user_id: @user.id, quiz_id: params[:quiz_id], team_id: @team.id, team_attempt: true)
-      puts "team attempt"
-      puts @attempt.team_id
     else
       @attempt = Attempt.new(user_id: @user.id, quiz_id: params[:quiz_id], team_id: nil, team_attempt: false)
-      puts "not team attempt"
-      puts @attempt.team_id
     end
     respond_to do |format|
       if @attempt.save

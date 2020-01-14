@@ -4,15 +4,26 @@ class TeamsController < ApplicationController
   # GET /teams
   # GET /teams.json
   def index
-    @teams = Team.all
+    if user_signed_in? && current_user.admin?
+      @teams = Team.all
+    elsif user_signed_in?
+      @course = current_user.enrolled_courses.first
+      @teams = @course.teams
+    else
+      redirect_to root_url, notice: "Sorry, you need to sign in first."
+    end
   end
 
   def import
-    @errors = Team.batch_import(params[:file])
-    if @errors.empty?
-      redirect_to admin_dashboard_path, notice: "Teams successfully imported."
+    if current_user.admin?
+      @errors = Team.batch_import(params[:file])
+      if @errors.empty?
+        redirect_to admin_dashboard_path, notice: "Teams successfully imported."
+      else
+        redirect_to admin_dashboard_path, notice: "#{@errors.join(", ")}"
+      end
     else
-      redirect_to admin_dashboard_path, notice: "#{@errors.join(", ")}"
+      redirect_to root_url, notice: "Sorry, you can't do that."
     end
   end
 
@@ -25,6 +36,7 @@ class TeamsController < ApplicationController
   # GET /teams/new
   def new
     @team = Team.new
+    @courses = Course.all
   end
 
   # GET /teams/1/edit
@@ -38,7 +50,7 @@ class TeamsController < ApplicationController
 
     respond_to do |format|
       if @team.save
-        format.html { redirect_to @team, notice: 'Team was successfully created.' }
+        format.html { redirect_to team_path(@team.name), notice: 'Team was successfully created.' }
         format.json { render :show, status: :created, location: @team }
       else
         format.html { render :new }

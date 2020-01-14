@@ -62,7 +62,7 @@ class AttemptChoicesController < ApplicationController
           @attempt.points = points
           @attempt.save
         elsif @choice.correct?
-          points = @attempt.points + points_possible(@question)
+          points = @attempt.points + 1
           @attempt.points = points
           @attempt.save
         end

@@ -1,24 +1,16 @@
 class AdminController < ApplicationController
   def dashboard
-    if current_user.admin?
-      @users = User.all
+    if user_signed_in? && current_user.admin?
+      @users = User.where(admin: [false, nil]).all
       @teams = Team.all
       @quizzes = Quiz.all
       @questions = Question.all
-      if @users.any?
-        print_user_attributes
-      end
-      if @teams.any?
-        print_team_attributes
-      end
-      if @quizzes.any?
-        print_quiz_attributes
-      end
-      if @questions.any?
-        print_question_attributes
-      end
+      print_team_attributes
+      print_quiz_attributes
+      print_user_attributes
+      print_question_attributes
     else
-      redirect_to root_url
+      redirect_to root_url, notice: "Sorry, you have to sign in first."
     end
   end
 

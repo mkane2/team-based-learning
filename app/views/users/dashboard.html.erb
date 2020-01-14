@@ -1,5 +1,9 @@
+<div class="row">
+    <div class="col-sm-12 jumbotron">
+      <h2><%= @user.username %></h2>
+      <hr />
+      <h4><%= link_to @team.name, team_path(@team.name) %></h4>
+    </div>
+</div>
 
-<h3>Available courses</h3>
-  <% @courses.each do | course | %>
-    <%= link_to course.name, quizzes_path %> <%= link_to "Join this Course", enrollments_path(course_id: course.id, user_id: current_user.id), method: :post, class: "btn btn-sm btn-primary" unless current_user.enrolled_courses.exists?(course.id) %>
-  <% end %>
+<%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>

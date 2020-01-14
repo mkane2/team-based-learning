@@ -2,29 +2,50 @@
 
 <h1><%= @team.name %></h1>
 <h3><%= @team.course.name %></h3>
-<hr />
-<% if @team.users.any? %>
-  <ul class="list-group">
-    <li class="list-group-item">Team members</li>
-    <% @team.users.each do |user| %>
-      <li class="list-group-item"><%= link_to user.username, user_path(user.username) %></li>
-    <% end %>
-  </ul>
-<% end %>
 
 <% if @attempts.any? %>
+<table class="table">
+  <tr>
+    <th>Quiz</th>
+    <th>My score</th>
+    <th>Team score</th>
+  </tr>
   <% @attempts.each do |attempt| %>
-    <%= attempt.quiz.name %> | <%= pluralize Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points, "My point" %> | <%= pluralize attempt.points, "Team point" %>
-    <hr />
+    <tr>
+      <td><%= attempt.quiz.name %></td>
+      <td><%= Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points%> / <%= number_to_percentage Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points.to_f / attempt.quiz.questions.count.to_f * 100, precision: 0 %></td>
+      <td><%= attempt.points %> / <%= number_to_percentage attempt.points.to_f / attempt.quiz.choices.count.to_f * 100, precision: 0 %></td>
+    </tr>
   <% end %>
+
+</table>
+
+<% end %>
+
+<% if @team.users.any? %>
+  <table class="table-sm">
+    <tr>
+        <th>Team member</th>
+        <th>email</th>
+    </tr>
+      <% @team.users.each do |user| %>
+        <tr>
+          <td>
+            <%= link_to "#{user.firstname}", user_path(user.username) %>
+          </td>
+          <td>
+            <%= mail_to user.email %>
+          </td>
+        </tr>
+      <% end %>
+  </table>
 <% end %>
 
 <hr />
 <% if current_user.team == @team %>
 <% else %>
-  <%= link_to "Join Team", memberships_path(team_id: @team.id), method: :post %>
 <% end %></br>
 <% if current_user.admin? %>
   <%= link_to 'Edit', edit_team_path(@team) %> |
-  <%= link_to 'Back', teams_path %>
+  <%= link_to 'Admin', admin_dashboard_path %>
 <% end %>

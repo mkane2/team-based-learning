@@ -9,7 +9,7 @@
   <%= @question.body %>
 </h4>
 
-<% if @question.choices.present? %>
+<% if @question.choices.present? && current_user.admin? %>
   <ol type="A" >
     <% @question.choices.each do |c| %>
       <li class="<%= 'text-success' if c.correct?%>" >

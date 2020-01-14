@@ -27,10 +27,12 @@ class User < ApplicationRecord
      require 'csv'
      users = []
      errors = []
+     @course = Course.first
      CSV.foreach(file.path, headers: true) do |row|
        user = User.new (row.to_h)
        if user.valid?
          user = User.create! (row.to_h)
+         enrollment = Enrollment.create! course_id: row['course_id'], user_id: user.id
        else
          errors << user.errors.full_messages
        end
