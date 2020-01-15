@@ -31,7 +31,8 @@ Rails.application.routes.draw do
   resources :courses
   resources :memberships
 
-  get 'quiz/:id/leaderboard', to: 'quizzes#leaderboard', as: 'leaderboard'
+  get 'quizzes/:id/leaderboard', to: 'quizzes#leaderboard', as: 'leaderboard'
+  get 'quizzes/:id/scores', to: 'quizzes#scores', as: 'scores'
 
   get 'add_member', to: 'memberships#add_member'
   get 'admin_dashboard', to: 'admin#dashboard'

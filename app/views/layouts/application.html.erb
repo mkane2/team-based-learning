@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>TBL Funstravaganza</title>
+    <script src="https://kit.fontawesome.com/7c2a59c613.js" crossorigin="anonymous"></script>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -36,13 +37,18 @@
             <%= link_to "Quizzes", quizzes_path, class: 'nav-link' %>
           </li>
 
-          <li class="nav-item">
             <% if user_signed_in? %>
+            <li class="nav-item">
+              <%= link_to "Edit settings", edit_user_registration_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
               <%= link_to "Sign out", destroy_user_session_path, method: :delete, class: 'nav-link' %>
+            </li>
             <% else %>
+            <li class="nav-item">
               <%= link_to "Sign in", new_user_session_path, class: 'nav-link' %>
+            </li>
             <% end %>
-          </li>
 
         </ul>
       </div>

@@ -31,8 +31,8 @@ class AttemptChoicesController < ApplicationController
   end
 
   def team_points(question)
-    @total = question.choices.size + 1
-    @attempts = current_user.team.attempt_choices.where(question_id: question.id).size
+    @total = question.choices.size
+    @attempts = current_user.team.attempt_choices.where(question_id: question.id).size - 1
     @possible = @total - @attempts
   end
 

@@ -1,57 +1,36 @@
-<div class="row">
-    <div class="col-sm-12">
+<%= render partial: "shared/jumbotron" %>
 
-      <div class="jumbotron">
-        <% if user_signed_in? %>
-          <div class="row">
-            <div class="col-sm-11">
-              <h2><%= link_to current_user.username, dashboard_path %></h2>
-            </div>
-            <div class="col-sm-1">
-              <%= number_to_percentage my_average, precision: 0 %>
-            </div>
-          </div>
-
-          <hr />
-          <div class="row">
-              <div class="col-sm-11">
-                <h4>
-                  <% if current_user.team.present? %>
-                    <%= link_to current_user.team.name, team_path(current_user.team.name) %>
-                  <% end %>
-                </h4>
-              </div>
-              <div class="col-sm-1">
-                <%= number_to_percentage my_team_average, precision: 0 %>
-              </div>
-          </div>
-        <% else %>
-          <%= link_to "Login", new_user_session_path, class: 'btn btn-primary btn-lg btn-block' %>
+<% if user_signed_in? %>
+  <% if current_user.admin? %>
+    <% if current_user.courses.any? %>
+      <ul class="list-group">
+        <li class="list-group-item">My courses</li>
+        <% current_user.courses.each do |course| %>
+          <li class="list-group-item"><%= link_to course.name, course_path(course) %></li>
         <% end %>
-      </div>
-
-      <% if user_signed_in? %>
-        <%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>
-
-        <% if current_user.admin? %>
-          <%= link_to "Super Secret Admin Dashboard", admin_dashboard_path, class: 'btn btn-primary' %>
-          <%= link_to "Create New Course", new_course_path, class: 'btn btn-primary' %>
-          <%= link_to "Create New Quiz", new_quiz_path, class: 'btn btn-primary' %>
-          <hr />
-          <% if current_user.courses.any? %>
-            <ul class="list-group">
-              <li class="list-group-item">My courses</li>
-              <% current_user.courses.each do |course| %>
-                <li class="list-group-item"><%= link_to course.name, course_path(course) %></li>
-              <% end %>
-            </ul>
-          <% end %>
-
+      </ul>
+    <% end %>
+    <table class="table">
+      <tr>
+          <th>Quiz</th>
+          <th>Due date</th>
+      </tr>
+        <% @quizzes.each do |quiz| %>
+            <tr>
+              <td>
+                <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm #{duedate_helper(quiz)}" %>
+              </td>
+              <td>
+                <strong>Due:</strong> <%= duedate(quiz) %>
+              </td>
+            </tr>
         <% end %>
-        <hr />
-        <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
-      <% else %>
+    </table>
+  <% else %>
+    <%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>
+  <% end %>
+  <hr />
+  <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+<% else %>
 
-      <% end %>
-    </div>
-</div>
+<% end %>

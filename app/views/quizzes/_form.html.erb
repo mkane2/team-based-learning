@@ -13,6 +13,17 @@
 
   <div class="field">
     <div class="form-group">
+      <label class="col-form-label col-form-label-lg" for="quiz_course"><%= form.label :course %></label>
+      <%= form.select :course_id, id: :quiz_course, class: 'form-control' do %>
+      <% @courses.each do |c| %>
+        <%= content_tag(:option, c.name, value: c.id) %>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="form-group">
       <label class="col-form-label col-form-label-lg" for="inputLarge"><%= form.label :name %></label>
     <%= form.text_field :name, id: :quiz_name, class: 'form-control form-control-lg' %>
     </div>
@@ -27,12 +38,8 @@
 
   <div class="field">
     <div class="form-group">
-      <label class="col-form-label col-form-label-lg" for="quiz_course"><%= form.label :course %></label>
-      <%= form.select :course_id, id: :quiz_course, class: 'form-control' do %>
-      <% @courses.each do |c| %>
-        <%= content_tag(:option, c.name, value: c.id) %>
-      <% end %>
-    <% end %>
+      <label class="col-form-label col-form-label-lg" for="inputLarge"><%= form.label :duedate %></label>
+    <%= form.datetime_local_field :due_date, id: :quiz_duedate, class: 'form-control form-control-lg' %>
     </div>
   </div>
 

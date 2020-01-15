@@ -6,7 +6,5 @@ A Rails (5.1.2) app for running Team Based Learning quizzes, deployable by one p
 
 ## Steps for running a course the first time
 
-## Common issues
-
 ## Contributing
 Pull requests are very welcome!  See the [Trello](https://trello.com/b/oyKJR0Eq/tbl) for the current to-do list.

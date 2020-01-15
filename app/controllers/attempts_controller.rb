@@ -4,20 +4,28 @@ class AttemptsController < ApplicationController
   # GET /attempts
   # GET /attempts.json
   def index
-    @attempts = Attempt.all
+    if user_signed_in?
+      @attempts = Attempt.all
+    else
+      redirect_to root_url, notice: "Sorry, you need to log in first."
+    end
   end
 
   # GET /attempts/1
   # GET /attempts/1.json
   def show
-    @quiz = Quiz.find(params[:quiz_id])
-    @questions = @quiz.questions
-    @choices = Choice.joins(:question).merge(@questions).uniq
-    @points_possible = @choices.size
-    if params[:results].present? && current_user.team.attempts.where(quiz_id: params[:quiz_id]).present?
-      @results = true
-      @team_attempt = @quiz.attempts.where(team_attempt: true, team_id: current_user.team.id).first
-      @individual_attempt = @quiz.attempts.where(team_attempt: false, user_id: current_user.id).first
+    if user_signed_in?
+      @quiz = Quiz.find(params[:quiz_id])
+      @questions = @quiz.questions
+      @choices = Choice.joins(:question).merge(@questions).uniq
+      @points_possible = @choices.size
+      if params[:results].present? && current_user.team.attempts.where(quiz_id: params[:quiz_id]).present?
+        @results = true
+        @team_attempt = @quiz.attempts.where(team_attempt: true, team_id: current_user.team.id).first
+        @individual_attempt = @quiz.attempts.where(team_attempt: false, user_id: current_user.id).first
+      end
+    else
+      redirect_to root_url, notice: "Sorry, you need to log in first."
     end
   end
 

@@ -1,5 +1,5 @@
 <div class="jumbotron" style="max-width: 100%; margin-top: 15px;">
-  <h4 class="display-3"><%= @quiz.name %></h4>
+  <h4 class="display-3"><%= @quiz.name %> <small class="text-muted"><%= pluralize @quiz.choices.count, "Point" %></small></h4>
 </div>
   <%= render partial: "leaderboard", locals: {quiz: @quiz, attempts: @attempts} %>
 

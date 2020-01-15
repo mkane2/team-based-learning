@@ -4,8 +4,10 @@ class QuestionsController < ApplicationController
   # GET /questions
   # GET /questions.json
   def index
-    if user_signed_in? && current_user.admin?
+    if user_signed_in? && current_user.admin? && params[:quiz_id].present?
       @questions = Question.where(quiz_id: params[:quiz_id])
+    elsif current_user.admin?
+      @questions = Question.all
     else
       redirect_to root_url, notice: "Sorry, you have to sign in first."
     end
@@ -19,10 +21,13 @@ class QuestionsController < ApplicationController
   # GET /questions/new
   def new
     @question = Question.new
+    @quizzes = Quiz.all
   end
 
   # GET /questions/1/edit
   def edit
+    @quizzes = Quiz.all
+    @quiz = @question.quiz
   end
 
   # POST /questions

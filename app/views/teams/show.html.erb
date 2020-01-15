@@ -1,7 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h1><%= @team.name %></h1>
-<h3><%= @team.course.name %></h3>
+<div class="jumbotron">
+  <h1><%= @team.name %> <small class="text-muted"><%= @team.course.name %></small></h1>
+</div>
 
 <% if @attempts.any? %>
 <table class="table">
@@ -12,7 +13,7 @@
   </tr>
   <% @attempts.each do |attempt| %>
     <tr>
-      <td><%= attempt.quiz.name %></td>
+      <td><%= link_to attempt.quiz.name, quiz_attempt_path(attempt.quiz, attempt, results: true), class: "btn btn-outline-secondary" %></td>
       <td><%= Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points%> / <%= number_to_percentage Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points.to_f / attempt.quiz.questions.count.to_f * 100, precision: 0 %></td>
       <td><%= attempt.points %> / <%= number_to_percentage attempt.points.to_f / attempt.quiz.choices.count.to_f * 100, precision: 0 %></td>
     </tr>

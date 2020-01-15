@@ -27,6 +27,7 @@ class QuizzesController < ApplicationController
   def show
     if user_signed_in? && current_user.admin?
       @question = @quiz.questions.build
+    elsif user_signed_in?
     else
       redirect_to root_url, notice: "Sorry, you have to sign in first."
     end
@@ -106,9 +107,33 @@ class QuizzesController < ApplicationController
   end
 
   def leaderboard
-    if user_signed_in? && current_user.admin?
+    if user_signed_in?
       @teams = Course.where(id: @quiz.course_id).first.teams
-      @attempts = Attempt.where(quiz_id: @quiz.id).where.not(team_id: nil).order("points DESC")
+      @attempts = Attempt.where(quiz_id: @quiz.id).where(team_attempt: true).order("points DESC")
+    else
+      redirect_to root_url, notice: "Sorry, you need to sign in first."
+    end
+  end
+
+  def scores
+    if user_signed_in? && current_user.admin?
+      @quiz = Quiz.find(params[:id])
+      @course = @quiz.course
+      if params[:sort] == "lastdesc"
+        @students = @course.users.order(lastname: :desc)
+      elsif params[:sort] == "team"
+        @students = @course.users.joins(:team).order("teams.name")
+      elsif params[:sort] == "individualasc"
+        @students = @course.users.joins(:attempts).where("attempts.team_attempt = ?", false).merge(Attempt.order(points: :asc)).uniq
+      elsif params[:sort] == "individualdesc"
+        @students = @course.users.joins(:attempts).where("attempts.team_attempt = ?", false).merge(Attempt.order(points: :desc)).uniq
+      elsif params[:sort] == "teamasc"
+        @students = @course.users.order(lastname: :asc)
+      elsif params[:sort] == "teamdesc"
+        @students = @course.users.order(lastname: :asc)
+      else
+        @students = @course.users.order(lastname: :asc)
+      end
     else
       redirect_to root_url, notice: "Sorry, you need to sign in first."
     end
@@ -122,6 +147,6 @@ class QuizzesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def quiz_params
-      params.require(:quiz).permit(:name, :description, :course_id, question_attributes: [:id, :body, :_destroy, choice_attributes: [:id, :choice_body, :correct, :_destroy]])
+      params.require(:quiz).permit(:name, :description, :course_id, :due_date, :randomize_questions, :randomize_answers, :show_all_questions, question_attributes: [:id, :body, :_destroy, choice_attributes: [:id, :choice_body, :correct, :_destroy]])
     end
 end

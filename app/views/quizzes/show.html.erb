@@ -7,17 +7,20 @@
 
 <% if @quiz.questions.exists? %>
 <div class="text-center">
-  <% if current_user.team.present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? %>
-    <%= link_to "View Quiz Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-primary btn-lg" %>
-  <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? && @quiz.due_date > Time.now %>
-    You can't take this team quiz yet.  Come back at <%= duedate(@quiz) %> to start the team quiz.
-  <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? %>
-    <%= link_to "Start Team Quiz", quiz_attempts_path(@quiz.id, team: true), method: :post, class: "btn btn-primary btn-lg", data: { confirm: 'Are you sure you want to start this quiz for your team?' } %>
-  <% else %>
-    <%= link_to "Start Quiz", quiz_attempts_path(@quiz.id), method: :post, class: "btn btn-primary btn-lg" %>
+  <% unless current_user.admin? %>
+    <% if current_user.team.present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? %>
+      <%= link_to "View Quiz Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-primary btn-lg" %>
+    <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? && @quiz.due_date > Time.now %>
+      You can't take this team quiz yet.  Come back at <%= duedate(@quiz) %> to start the team quiz.
+    <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? %>
+      <%= link_to "Start Team Quiz", quiz_attempts_path(@quiz.id, team: true), method: :post, class: "btn btn-primary btn-lg", data: { confirm: 'Are you sure you want to start this quiz for your team?' } %>
+    <% else %>
+      <%= link_to "Start Quiz", quiz_attempts_path(@quiz.id), method: :post, class: "btn btn-primary btn-lg" %>
+    <% end %>
   <% end %>
   <% if current_user.admin? %>
-    <%= link_to "View Results", "#", class: "btn btn-primary btn-lg" %>
+    <%= link_to "Edit Quiz", edit_quiz_path(@quiz.id), class: "btn btn-primary btn-lg" %>
+    <%= link_to "View Scores", scores_path(@quiz.id), class: "btn btn-primary btn-lg" %>
   <% end %>
 </div>
 <% end %>

@@ -8,6 +8,62 @@ module QuizzesHelper
     end
   end
 
+  def lastasc_order_helper(sort)
+    if sort == 'lastasc'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
+  def lastdesc_order_helper(sort)
+    if sort == 'lastdesc'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
+  def individualasc_order_helper(sort)
+    if sort == 'individualasc'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
+  def individualdesc_order_helper(sort)
+    if sort == 'individualdesc'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
+  def team_order_helper(sort)
+    if sort == 'team'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
+  def teamasc_order_helper(sort)
+    if sort == 'teamasc'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
+  def teamdesc_order_helper(sort)
+    if sort == 'teamdesc'
+      "btn-primary"
+    else
+      "btn-outline-primary"
+    end
+  end
+
   def duedate(quiz)
     quiz.due_date.strftime("%A, %B %e at %l:%M%p")
   end
