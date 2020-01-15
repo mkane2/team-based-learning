@@ -3,6 +3,9 @@
 A Rails (5.1.2) app for running Team Based Learning quizzes, deployable by one person to Heroku.  Student scores are not visible except to logged-in users, but no guarantees are made about FERPA compliance.  Run at your own risk.
 
 ## Deployment instructions
+1. Create a [Heroku account](https://signup.heroku.com/)
+2. [Create a new app](https://dashboard.heroku.com/new-app)
+3. 
 
 ## Steps for running a course the first time
 
