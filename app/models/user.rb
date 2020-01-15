@@ -19,7 +19,7 @@ class User < ApplicationRecord
    def email_domain
      domain = email.split("@").last
      if !email.blank?
-       errors.add(:email, "Invalid email domain") if domain != "#{@school_email_domain}"
+       errors.add(:email, "Invalid email domain") if domain != Tbl::Application.config.school_email_domain
      end
    end
 

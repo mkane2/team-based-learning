@@ -15,6 +15,7 @@ class UsersController < ApplicationController
     else
       if User.where(admin: true).present?
       else
+        puts @professor_email
         User.create! username: @professor, password: @default, email: @professor_email, admin: true
       end
     end
