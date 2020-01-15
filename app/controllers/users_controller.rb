@@ -12,6 +12,11 @@ class UsersController < ApplicationController
     elsif user_signed_in?
       @course = current_user.enrolled_courses.first
       @quizzes = @course.quizzes.where(active: true).order(due_date: :asc)
+    else
+      if User.where(admin: true).present?
+      else
+        User.create! username: @professor, password: @default, email: @professor_email, admin: true
+      end
     end
   end
 
