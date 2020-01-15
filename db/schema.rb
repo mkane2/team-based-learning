@@ -12,12 +12,15 @@
 
 ActiveRecord::Schema.define(version: 20200112222959) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "attempt_choices", force: :cascade do |t|
-    t.integer "attempt_id"
-    t.integer "question_id"
-    t.integer "choice_id"
-    t.integer "user_id"
-    t.integer "team_id"
+    t.bigint "attempt_id"
+    t.bigint "question_id"
+    t.bigint "choice_id"
+    t.bigint "user_id"
+    t.bigint "team_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["attempt_id"], name: "index_attempt_choices_on_attempt_id"
@@ -28,9 +31,9 @@ ActiveRecord::Schema.define(version: 20200112222959) do
   end
 
   create_table "attempts", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "team_id"
-    t.integer "quiz_id"
+    t.bigint "user_id"
+    t.bigint "team_id"
+    t.bigint "quiz_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "points", default: 0
@@ -43,10 +46,10 @@ ActiveRecord::Schema.define(version: 20200112222959) do
   create_table "choices", force: :cascade do |t|
     t.text "choice_body"
     t.boolean "correct"
-    t.integer "quiz_id"
+    t.bigint "quiz_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "question_id"
+    t.bigint "question_id"
     t.index ["question_id"], name: "index_choices_on_question_id"
     t.index ["quiz_id"], name: "index_choices_on_quiz_id"
   end
@@ -57,8 +60,8 @@ ActiveRecord::Schema.define(version: 20200112222959) do
     t.boolean "show_all_questions", default: true
     t.boolean "active", default: true
     t.integer "duration"
-    t.integer "course_id"
-    t.integer "user_id"
+    t.bigint "course_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_course_options_on_course_id"
@@ -68,15 +71,15 @@ ActiveRecord::Schema.define(version: 20200112222959) do
   create_table "courses", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_courses_on_user_id"
   end
 
   create_table "enrollments", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "course_id"
+    t.bigint "user_id"
+    t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_enrollments_on_course_id"
@@ -85,18 +88,20 @@ ActiveRecord::Schema.define(version: 20200112222959) do
 
   create_table "questions", force: :cascade do |t|
     t.text "body"
-    t.integer "quiz_id"
+    t.bigint "quiz_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["quiz_id"], name: "index_questions_on_quiz_id"
   end
 
   create_table "quizzes", force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "user_id"
     t.string "name"
     t.text "description"
-    t.datetime "due_date", default: "2020-02-11 22:31:30"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "course_id"
+    t.datetime "due_date"
     t.boolean "randomize_questions", default: false
     t.boolean "randomize_answers", default: false
     t.boolean "show_all_questions", default: true
@@ -107,7 +112,7 @@ ActiveRecord::Schema.define(version: 20200112222959) do
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
-    t.integer "course_id"
+    t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_teams_on_course_id"
@@ -128,7 +133,7 @@ ActiveRecord::Schema.define(version: 20200112222959) do
     t.datetime "updated_at", null: false
     t.boolean "admin"
     t.string "username"
-    t.integer "team_id"
+    t.bigint "team_id"
     t.integer "studentid"
     t.string "firstname"
     t.string "lastname"
@@ -137,7 +142,7 @@ ActiveRecord::Schema.define(version: 20200112222959) do
     t.index ["team_id"], name: "index_users_on_team_id"
   end
 
-  create_table "votes", force: :cascade do |t|
+  create_table "votes", id: :serial, force: :cascade do |t|
     t.string "votable_type"
     t.integer "votable_id"
     t.string "voter_type"
@@ -151,4 +156,23 @@ ActiveRecord::Schema.define(version: 20200112222959) do
     t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
   end
 
+  add_foreign_key "attempt_choices", "attempts"
+  add_foreign_key "attempt_choices", "choices"
+  add_foreign_key "attempt_choices", "questions"
+  add_foreign_key "attempt_choices", "teams"
+  add_foreign_key "attempt_choices", "users"
+  add_foreign_key "attempts", "quizzes"
+  add_foreign_key "attempts", "teams"
+  add_foreign_key "attempts", "users"
+  add_foreign_key "choices", "questions"
+  add_foreign_key "choices", "quizzes"
+  add_foreign_key "course_options", "courses"
+  add_foreign_key "course_options", "users"
+  add_foreign_key "courses", "users"
+  add_foreign_key "enrollments", "courses"
+  add_foreign_key "questions", "quizzes"
+  add_foreign_key "quizzes", "courses"
+  add_foreign_key "quizzes", "users"
+  add_foreign_key "teams", "courses"
+  add_foreign_key "users", "teams"
 end
