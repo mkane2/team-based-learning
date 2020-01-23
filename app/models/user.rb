@@ -29,9 +29,9 @@ class User < ApplicationRecord
      errors = []
      @course = Course.first
      CSV.foreach(file.path, headers: true) do |row|
-       user = User.new (email: row['email'], admin: row['admin'], username: row['username'], team_id: row['team_id'], studentid: row['studentid'], firstname: row['firstname'], lastname: row['lastname'], password: row['password'])
+       user = User.new email: row['email'], admin: row['admin'], username: row['username'], team_id: row['team_id'], studentid: row['studentid'], firstname: row['firstname'], lastname: row['lastname'], password: row['password']
        if user.valid?
-         user = User.create! (email: row['email'], admin: row['admin'], username: row['username'], team_id: row['team_id'], studentid: row['studentid'], firstname: row['firstname'], lastname: row['lastname'], password: row['password'])
+         user = User.create! email: row['email'], admin: row['admin'], username: row['username'], team_id: row['team_id'], studentid: row['studentid'], firstname: row['firstname'], lastname: row['lastname'], password: row['password']
          enrollment = Enrollment.create! course_id: row['course_id'], user_id: user.id
        else
          errors << user.errors.full_messages
