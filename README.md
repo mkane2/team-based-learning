@@ -10,6 +10,13 @@ A Rails (5.1.2) app for running Team Based Learning quizzes, deployable by one p
 4. CLI `heroku run rake db:migrate`
 
 ## Steps for running a course the first time
+1. Login with the email and password from `config/application.rb`
+2. Change your password in `/users/edit`
+3. Create a new course
+4. Create or import the number of teams your course requires
+5. Create or import a quiz
+6. Create or import questions for your quizzes
+7. Import a list of your students or give your students instructions to create their own accounts
 
 ## Contributing
 Pull requests are very welcome!  See the [Trello](https://trello.com/b/oyKJR0Eq/tbl) for the current to-do list.
