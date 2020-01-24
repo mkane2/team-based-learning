@@ -29,6 +29,19 @@ class AttemptsController < ApplicationController
     end
   end
 
+  def show_student
+    if user_signed_in? && current_user.admin?
+      @quiz = Quiz.find(params[:quiz_id])
+      @questions = @quiz.questions
+      @choices = Choice.joins(:question).merge(@questions).uniq
+      @points_possible = @choices.size
+      @student = User.find(params[:user_id])
+      @attempt = Attempt.find(params[:attempt_id])
+    else
+      redirect_to root_url, notice: "Sorry, you need to log in first."
+    end
+  end
+
   # GET /attempts/new
   def new
     @quiz = Quiz.find(params[:quiz_id])
