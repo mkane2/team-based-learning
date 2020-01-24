@@ -9,9 +9,11 @@ class UsersController < ApplicationController
   def index
     if user_signed_in? && current_user.admin?
       @quizzes = Quiz.all
+      @quizzes = @quizzes.order(due_date: :asc)
     elsif user_signed_in?
       @course = current_user.enrolled_courses.first
-      @quizzes = @course.quizzes.where(active: true).order(due_date: :asc)
+      @quizzes = @course.quizzes.where(active: true)
+      @quizzes = @quizzes.order(due_date: :asc)
     else
       if User.where(admin: true).present?
       else
