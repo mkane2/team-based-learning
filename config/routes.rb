@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
   get 'quizzes/:id/leaderboard', to: 'quizzes#leaderboard', as: 'leaderboard'
   get 'quizzes/:id/scores', to: 'quizzes#scores', as: 'scores'
+  get 'quizzes/:id/results', to: 'quizzes#results', as: 'results'
   get 'quizzes/:quiz_id/attempts/:attempt_id/students/:user_id', to: 'attempts#show_student', as: 'show_student'
 
   get 'add_member', to: 'memberships#add_member'

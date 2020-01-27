@@ -80,4 +80,13 @@ module AttemptsHelper
       end
     end
   end
+
+  def results_warning_helper(choice)
+    if choice.correct? == false
+      if choice.attempt_choices.count.to_f >= (choice.quiz.course.users.count.to_f / 5)
+        'table-danger'
+      end
+    end
+  end
+
 end

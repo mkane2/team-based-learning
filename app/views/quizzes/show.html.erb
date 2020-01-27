@@ -25,6 +25,7 @@
   <% if current_user.admin? %>
     <%= link_to "Edit Quiz", edit_quiz_path(@quiz.id), class: "btn btn-primary btn-lg" %>
     <%= link_to "View Scores", scores_path(@quiz.id), class: "btn btn-primary btn-lg" %>
+    <%= link_to "View Results", results_path(@quiz.id), class: "btn btn-primary btn-lg" %>
   <% end %>
 </div>
 <% end %>

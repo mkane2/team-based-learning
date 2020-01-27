@@ -115,6 +115,16 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def results
+    if user_signed_in? && current_user.admin?
+      @quiz = Quiz.find(params[:id])
+      @questions = @quiz.questions
+      @choices = @quiz.choices
+    else
+      redirect_to root_url, notice: "Sorry, you need to sign in first."
+    end
+  end
+
   def scores
     if user_signed_in? && current_user.admin?
       @quiz = Quiz.find(params[:id])
