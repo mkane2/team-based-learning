@@ -53,7 +53,7 @@
         <td><%= user.id %></td>
         <td><%= user.email %></td>
         <td><%= user.admin %></td>
-        <td><%= user.username %></td>
+        <td><%= link_to user.username, edit_user_path(user.username), class: 'btn btn-outline-primary btn-sm' %></td>
         <td><%= user.team_id if user.team_id.present? %>: <%= user.team.name if user.team.present? %></td>
         <td><%= user.studentid %></td>
         <td><%= user.firstname %></td>

@@ -5,16 +5,17 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :courses
-  has_many :enrollments
+  has_many :enrollments, dependent: :destroy
   has_many :enrolled_courses, through: :enrollments, source: :course
   has_many :quizzes
-  has_many :attempts
-  has_many :attempt_choices
+  has_many :attempts, dependent: :destroy
+  has_many :attempt_choices, dependent: :destroy
   belongs_to :team, optional: true
    validates_presence_of     :username, format: { with: /\A[a-zA-Z0-9\s]+\z/i, message: "can only contain letters and numbers." } # required
    validates_uniqueness_of   :username, message: "%{value} is already taken" # required
    validate :email_domain
    validates_uniqueness_of :email, message: "%{value} is already taken"
+   accepts_nested_attributes_for :team, reject_if: :all_blank
 
    def email_domain
      domain = email.split("@").last
