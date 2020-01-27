@@ -5,9 +5,9 @@ class QuizzesController < ApplicationController
   # GET /quizzes.json
   def index
     if user_signed_in? && current_user.admin?
-      @quizzes = Quiz.all
+      @quizzes = Quiz.all.order(due_date: :asc)
     elsif user_signed_in?
-      @quizzes = current_user.enrolled_courses.first.quizzes
+      @quizzes = current_user.enrolled_courses.first.quizzes.order(due_date: :asc)
     else
       redirect_to root_url, notice: "Sorry, you need to sign in first."
     end
