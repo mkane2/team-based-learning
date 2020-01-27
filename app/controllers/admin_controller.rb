@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
   def dashboard
     if user_signed_in? && current_user.admin?
-      @users = User.where(admin: [false, nil]).all
+      @users = User.where(admin: [false, nil]).all.order(lastname: :asc)
       @teams = Team.all
       @quizzes = Quiz.all
       @questions = Question.all
