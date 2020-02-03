@@ -128,19 +128,23 @@ class AttemptChoicesController < ApplicationController
     @questions = @attempt.quiz.questions
     if @team_id.present?
       @questions.each do |q|
-        p = q.choices.count.to_f - q.attempt_choices.count.to_f + 1
+        p = q.choices.count.to_f - q.attempt_choices.where(team_id: @team_id).count.to_f + 1
         if p < 1
           p = 1
         end
         @attempt.points = @attempt.points + p.to_i
+        puts "points: #{@attempt.points}"
+        @attempt.save
       end
     else
       @questions.each do |q|
-        p = q.choices.count.to_f - q.attempt_choices.count.to_f + 1
+        p = q.choices.count.to_f - q.attempt_choices.where(user_id: @student.id, team_id: nil).count.to_f + 1
         if p < 0
           p = 0
         end
         @attempt.points = @attempt.points + p.to_i
+        puts "points: #{@attempt.points}"
+        @attempt.save
       end
     end
 
