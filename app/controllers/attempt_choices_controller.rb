@@ -83,7 +83,7 @@ class AttemptChoicesController < ApplicationController
         format.json { render :show, status: :created, location: @attempt_choice }
         format.js
         if @choice.correct? && @attempt.team_attempt?
-          points = @attempt.points + team_points(@question)
+          points = @attempt.points.to_i + team_points(@question).to_i
           @attempt.points = points
           @attempt.save
         elsif @choice.correct?
