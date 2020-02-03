@@ -12,6 +12,28 @@ class AttemptChoicesController < ApplicationController
   def show
   end
 
+  def show_attempts
+    if user_signed_in? && current_user.admin?
+      @question = Question.find(params[:question_id])
+      @student = User.find(params[:student_id])
+      @attempt = @student.attempts.where(quiz_id: @question.quiz_id, team_attempt: false).first
+      @attempts = @question.attempt_choices.where(user_id: @student.id)
+    else
+      redirect_to root_url
+    end
+  end
+
+  def show_team_attempts
+    if user_signed_in? && current_user.admin?
+      @question = Question.find(params[:question_id])
+      @team = Team.find(params[:team_id])
+      @attempt = @team.attempts.where(quiz_id: @question.quiz_id, team_attempt: true).first
+      @attempts = @question.attempt_choices.where(team_id: @team.id)
+    else
+      redirect_to root_url
+    end
+  end
+
   # GET /attempt_choices/new
   def new
     @attempt_choice = AttemptChoice.new
@@ -34,6 +56,9 @@ class AttemptChoicesController < ApplicationController
     @total = question.choices.size
     @attempts = current_user.team.attempt_choices.where(question_id: question.id).size - 1
     @possible = @total - @attempts
+    if @possible < 1
+      @possible = 1
+    end
   end
 
   def create
@@ -90,10 +115,44 @@ class AttemptChoicesController < ApplicationController
   # DELETE /attempt_choices/1
   # DELETE /attempt_choices/1.json
   def destroy
+    @question = @attempt_choice.question
+    @student = @attempt_choice.user
+    if @attempt_choice.team_id.present?
+      @team_id = Team.find(@attempt_choice.team_id).id
+    else
+      @team_id = nil
+    end
+
+    @attempt = @attempt_choice.attempt
+    @attempt.points = 0
+    @questions = @attempt.quiz.questions
+    if @team_id.present?
+      @questions.each do |q|
+        p = q.choices.count.to_f - q.attempt_choices.count.to_f + 1
+        if p < 1
+          p = 1
+        end
+        @attempt.points = @attempt.points + p
+      end
+    else
+      @questions.each do |q|
+        p = q.choices.count.to_f - q.attempt_choices.count.to_f + 1
+        if p < 0
+          p = 0
+        end
+        @attempt.points = @attempt.points + p
+      end
+    end
+
     @attempt_choice.destroy
     respond_to do |format|
-      format.html { redirect_to attempt_choices_url, notice: 'Attempt choice was successfully destroyed.' }
-      format.json { head :no_content }
+      if @team_id.present?
+        format.html { redirect_to view_team_attempt_choices_path(@question.id, @team_id), notice: 'Attempt choice was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to view_attempt_choices_path(@question.id, @student.id), notice: 'Attempt choice was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 

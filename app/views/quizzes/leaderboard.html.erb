@@ -8,11 +8,11 @@ $(function() {
   $(document).ready(function() {
     setInterval(function() {
       jQuery.ajax({
-        url: "/quiz/<%= @quiz.id %>/leaderboard",
+        url: "/quizzes/<%= @quiz.id %>/leaderboard",
         type: "GET",
         dataType: "script"
       });
-    }, 5000);
+    }, 2000);
   });
 });
 </script>

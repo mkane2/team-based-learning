@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   get 'quizzes/:id/scores', to: 'quizzes#scores', as: 'scores'
   get 'quizzes/:id/results', to: 'quizzes#results', as: 'results'
   get 'quizzes/:quiz_id/attempts/:attempt_id/students/:user_id', to: 'attempts#show_student', as: 'show_student'
+  get 'quizzes/:quiz_id/attempts/:attempt_id/teams/:team_id', to: 'attempts#show_team', as: 'show_team'
+  get 'questions/:question_id/students/:student_id', to: 'attempt_choices#show_attempts', as: 'view_attempt_choices'
+  get 'questions/:question_id/teams/:team_id', to: 'attempt_choices#show_team_attempts', as: 'view_team_attempt_choices'
 
   get 'add_member', to: 'memberships#add_member'
   get 'admin_dashboard', to: 'admin#dashboard'

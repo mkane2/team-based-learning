@@ -1,7 +1,9 @@
 module QuizzesHelper
 
   def duedate_helper(quiz)
-    if quiz.due_date < Time.now.to_datetime
+    if current_user.admin? && quiz.due_date < Time.now.to_datetime
+      'btn-info'
+    elsif quiz.due_date < Time.now.to_datetime
       'btn-info disabled'
     else
       'btn-outline-info'
@@ -70,12 +72,14 @@ module QuizzesHelper
 
   def progress_helper(quiz, team)
     @total = quiz.questions.size
-    @team_attempt = quiz.attempts.where(team_id: team.id).first
-    if @team_choices_made = @team_attempt.present?
+    puts "total: #{@total}"
+    @team_attempt = quiz.attempts.where(team_id: team.id, team_attempt: true).first
+    if @team_attempt.present?
       @team_choices_made = @team_attempt.attempt_choices.where(team_id: team.id)
-      @team_progress = @team_choices_made.includes(:question).uniq.size.to_f
-      percent = @team_progress / @total.to_f
-      percent = percent * 100
+      puts "team_choices_made #{@team_choices_made}"
+      @team_progress = @team_choices_made.map(&:question).compact.uniq.count.to_f
+      puts "team_progress #{@team_progress}"
+      percent = ( @team_progress / @total.to_f ) * 100
       percent.to_s
     else
       0

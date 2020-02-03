@@ -1,7 +1,7 @@
 <div id="leaderboard">
 <ol>
 <% @attempts.each do |attempt| %>
-<div class="leaderboard-row <%= 'alert-secondary' if attempt.team == current_user.team %> <%= 'alert-success' if @attempts.first %>">
+<div class="leaderboard-row <%= 'alert-secondary' if attempt.team == current_user.team %> <%= 'alert-success' if attempt.id == @attempts.first.id %>">
   <li>
     <div class="row">
       <div class="col-sm-8">

@@ -43,7 +43,10 @@
           <% end %>
         </td>
         <td><%= student.team.name %></td>
-        <td><%= student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).first.points if student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).present? %></td>
+        <td><% if student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).present? %>
+            <%= link_to student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).first.points, show_team_path(@quiz.id, student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).first.id, student.team.id), class: "btn btn-sm btn-outline-primary" %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
 </table>

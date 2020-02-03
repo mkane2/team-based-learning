@@ -5,9 +5,7 @@
         <h2><%= link_to current_user.username, dashboard_path %></h2>
       </div>
       <div class="col-sm-1">
-        <% unless current_user.admin? %>
-          <%= number_to_percentage my_average, precision: 0 if my_average > 0 %>
-        <% end %>
+
       </div>
     </div>
 
@@ -25,9 +23,7 @@
           </h4>
         </div>
         <div class="col-sm-1">
-          <% unless current_user.admin? %>
-            <%= number_to_percentage my_team_average, precision: 0 if my_team_average > 0 %>
-          <% end %>
+
         </div>
     </div>
   <% else %>
