@@ -132,7 +132,7 @@ class AttemptChoicesController < ApplicationController
         if p < 1
           p = 1
         end
-        @attempt.points = @attempt.points + p
+        @attempt.points = @attempt.points + p.to_i
       end
     else
       @questions.each do |q|
@@ -140,7 +140,7 @@ class AttemptChoicesController < ApplicationController
         if p < 0
           p = 0
         end
-        @attempt.points = @attempt.points + p
+        @attempt.points = @attempt.points + p.to_i
       end
     end
 
