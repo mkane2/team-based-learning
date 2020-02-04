@@ -38,7 +38,7 @@ gem 'devise'
 
 gem 'cocoon'
 
-gem 'acts_as_votable'
+# gem 'acts_as_votable'
 
 # send email with sendgrid on Heroku
 gem 'sendgrid-ruby'
