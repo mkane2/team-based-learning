@@ -138,8 +138,9 @@ class AttemptChoicesController < ApplicationController
       end
     else
       @questions.each do |q|
-        p = q.choices.count.to_f - q.attempt_choices.where(user_id: @student.id, team_id: nil).count.to_f + 1
-        if p < 0
+        if q.attempt_choices.where(user_id: @student.id, team_id: nil).first.correct?
+          p = 1
+        else
           p = 0
         end
         @attempt.points = @attempt.points + p.to_i
