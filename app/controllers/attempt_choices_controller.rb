@@ -54,11 +54,15 @@ class AttemptChoicesController < ApplicationController
 
   def team_points(question)
     @total = question.choices.size
+    puts "total: #{@total}"
     @attempts = current_user.team.attempt_choices.where(question_id: question.id).size - 1
+    puts "attempt count: #{@attempts}"
     @possible = @total - @attempts
+    puts "possible: #{@possible}"
     if @possible < 1
       @possible = 1
     end
+    @possible.to_i
   end
 
   def create
@@ -67,6 +71,7 @@ class AttemptChoicesController < ApplicationController
     @attempt = Attempt.find(params[:attempt_id])
     if @attempt.points.nil?
       @attempt.points = 0
+      @attempt.save
     end
     @choice = Choice.find(params[:choice_id])
     @question = Question.find(params[:question_id])
@@ -79,18 +84,20 @@ class AttemptChoicesController < ApplicationController
 
     respond_to do |format|
       if @attempt_choice.save
-        format.html { redirect_to quiz_attempt_path(@quiz.id, @attempt.id), notice: 'Attempt choice was successfully created.' }
-        format.json { render :show, status: :created, location: @attempt_choice }
-        format.js
         if @choice.correct? && @attempt.team_attempt?
-          points = @attempt.points.to_i + team_points(@question).to_i
+          points = @attempt.points + team_points(@question)
+          puts "points: #{points}"
           @attempt.points = points
+          puts "attempt points: #{@attempt.points}"
           @attempt.save
         elsif @choice.correct?
           points = @attempt.points + 1
           @attempt.points = points
           @attempt.save
         end
+        format.html { redirect_to quiz_attempt_path(@quiz.id, @attempt.id), notice: 'Attempt choice was successfully created.' }
+        format.json { render :show, status: :created, location: @attempt_choice }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @attempt_choice.errors, status: :unprocessable_entity }
