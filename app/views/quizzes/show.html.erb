@@ -7,11 +7,12 @@
 
 <% if @quiz.questions.exists? %>
 <div class="text-center">
+
   <% unless current_user.admin? %>
     <% if current_user.team.present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? %>
-      <%= link_to "View Quiz Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-primary btn-lg" %>
+      <%= link_to "View My Quiz Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-primary btn-lg" %>
     <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? && @quiz.due_date > Time.now %>
-      <%= link_to "View Quiz", quiz_attempt_path(@quiz.id, current_user.attempts.first.id), class: "btn btn-primary btn-lg" %>
+      <%= link_to "Start Quiz", quiz_attempt_path(@quiz.id, current_user.attempts.first.id), class: "btn btn-primary btn-lg" %>
       <br />
       You can't take this team quiz yet.  Come back at <%= duedate(@quiz) %> to start the team quiz.
     <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? == false %>
@@ -22,12 +23,14 @@
       <%= link_to "Start Quiz", quiz_attempts_path(@quiz.id), method: :post, class: "btn btn-primary btn-lg" %>
     <% end %>
   <% end %>
+
   <% if current_user.admin? %>
     <%= link_to "Edit Quiz", edit_quiz_path(@quiz.id), class: "btn btn-primary btn-lg" %>
     <%= link_to "View Scores", scores_path(@quiz.id), class: "btn btn-primary btn-lg" %>
     <%= link_to "View Results", results_path(@quiz.id), class: "btn btn-primary btn-lg" %>
     <%= link_to "Leaderboard", leaderboard_path(@quiz.id), class: "btn btn-primary btn-lg" %>
   <% end %>
+
 </div>
 <% end %>
 
