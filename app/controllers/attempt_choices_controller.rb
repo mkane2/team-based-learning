@@ -145,7 +145,7 @@ class AttemptChoicesController < ApplicationController
       end
     else
       @questions.each do |q|
-        if q.attempt_choices.where(user_id: @student.id, team_id: nil).first.correct?
+        if q.attempt_choices.where(user_id: @student.id, team_id: nil).first.choice.correct?
           p = 1
         else
           p = 0
