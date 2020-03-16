@@ -14,8 +14,10 @@ class Question < ApplicationRecord
     puts "headers #{headers}"
     headers.each do |header|
       puts "header #{header}"
-      if header.include? "choice_body"
-        choice_count += 1
+      unless header.nil?
+        if header.include? "choice_body"
+          choice_count += 1
+        end
       end
     end
     puts "this many choices #{choice_count}"
