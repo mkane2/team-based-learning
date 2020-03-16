@@ -13,6 +13,7 @@ class Question < ApplicationRecord
     choice_count = 0
     puts "headers #{headers}"
     headers.each do |header|
+      puts "header #{header}"
       if header.include? "choice_body"
         choice_count += 1
       end
