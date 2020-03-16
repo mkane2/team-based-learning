@@ -11,6 +11,7 @@ class Question < ApplicationRecord
     get_headers = CSV.read(file.path, headers: true)
     headers = get_headers.headers
     choice_count = 0
+    puts "headers #{headers}"
     headers.each do |header|
       if header.include? "choice_body"
         choice_count += 1
