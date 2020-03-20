@@ -1,4 +1,4 @@
-<% q.choices.shuffle.each_with_index do |c, index| %>
+<% q.choices.each_with_index do |c, index| %>
   <% if attempt.team_attempt? && q.attempt_choices.where(team_id: current_user.team.id).any? %>
     <div class="response-wrapper">
       <%= results_helper(c) if @results.present? %>
