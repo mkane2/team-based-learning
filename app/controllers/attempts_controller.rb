@@ -21,8 +21,8 @@ class AttemptsController < ApplicationController
       @points_possible = @choices.size
       if params[:results].present? && current_user.team.attempts.where(quiz_id: params[:quiz_id]).present?
         @results = true
-        @team_attempt = @quiz.attempts.where(team_attempt: true, team_id: current_user.team.id).first
-        @individual_attempt = @quiz.attempts.where(team_attempt: false, user_id: current_user.id).first
+        @team_attempt = @quiz.attempts.where(team_attempt: true, team_id: current_user.team.id, quiz_id: @quiz.id).first
+        @individual_attempt = @quiz.attempts.where(team_attempt: false, user_id: current_user.id, quiz_id: @quiz.id).first
       end
     else
       redirect_to root_url, notice: "Sorry, you need to log in first."
@@ -46,8 +46,13 @@ class AttemptsController < ApplicationController
     if user_signed_in? && current_user.admin?
       @attempt = Attempt.find(params[:id])
       @choices = AttemptChoice.where(attempt_id: @attempt.id).all
-      # @quiz = @attempt.quiz
-      # @points = @quiz.questions.size
+      @quiz = @attempt.quiz
+      @quiz.questions.each do |q|
+        attemptchoices = AttemptChoice.where(question_id: q.id, user_id: @attempt.user_id).all
+        attemptchoices.each do |c|
+          c.update(attempt_id: @attempt.id)
+        end
+      end
       @points = 0
       @choices.each do |c|
         if c.choice.correct == true
