@@ -42,6 +42,29 @@ class AttemptsController < ApplicationController
     end
   end
 
+  def rescore
+    if user_signed_in? && current_user.admin?
+      @attempt = Attempt.find(params[:id])
+      @choices = AttemptChoice.where(attempt_id: @attempt.id).all
+      # @quiz = @attempt.quiz
+      # @points = @quiz.questions.size
+      @points = 0
+      @choices.each do |c|
+        if c.choice.correct == true
+          @points = @points + 1
+          puts "#{@points} + 1"
+        else
+          @points
+        end
+      end
+      puts "#{@points} total"
+      @attempt.points = @points
+      redirect_to show_student_path(quiz_id: @attempt.quiz_id, attempt_id: @attempt.id, user_id: @attempt.user_id), notice: "Quiz rescored."
+    else
+      redirect_to root_url, notice: "Sorry, you need to log in first."
+    end
+  end
+
   def show_team
     if user_signed_in? && current_user.admin?
       @quiz = Quiz.find(params[:quiz_id])

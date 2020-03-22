@@ -4,7 +4,7 @@
   </small>
 </h1>
 
-<h3 class="alert alert-success sticky-top"><%= @attempt.points %> correct | <%= pluralize @attempt.quiz.questions.count, 'Points' %> possible</h3>
+<h3 class="alert alert-success sticky-top"><%= @attempt.points %> correct | <%= pluralize @attempt.quiz.questions.count, 'Points' %> possible <%= link_to "Rescore", rescore_path(@attempt.id), class: "btn btn-secondary btn-lg" %></h3>
 
   <div class="field">
     <ol type="1">
