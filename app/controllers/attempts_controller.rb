@@ -57,8 +57,7 @@ class AttemptsController < ApplicationController
           @points
         end
       end
-      puts "#{@points} total"
-      @attempt.points = @points
+      @attempt.update(points: @points)
       redirect_to show_student_path(quiz_id: @attempt.quiz_id, attempt_id: @attempt.id, user_id: @attempt.user_id), notice: "Quiz rescored."
     else
       redirect_to root_url, notice: "Sorry, you need to log in first."
