@@ -48,7 +48,7 @@ class AttemptsController < ApplicationController
       @choices = AttemptChoice.where(attempt_id: @attempt.id).all
       @quiz = @attempt.quiz
       @quiz.questions.each do |q|
-        attemptchoices = AttemptChoice.where(question_id: q.id, user_id: @attempt.user_id).all
+        attemptchoices = AttemptChoice.where(question_id: q.id, user_id: @attempt.user_id, team_id: nil).all
         attemptchoices.each do |c|
           c.update(attempt_id: @attempt.id)
         end
