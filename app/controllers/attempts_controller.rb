@@ -58,7 +58,7 @@ class AttemptsController < ApplicationController
         end
       end
       @attempt.update(points: @points)
-      redirect_to show_student_path(quiz_id: @attempt.quiz_id, attempt_id: @attempt.id, user_id: @attempt.user_id), notice: "Quiz rescored."
+      redirect_to show_student_path(quiz_id: @attempt.quiz_id, attempt_id: @attempt.id, user_id: @attempt.user_id), notice: "Quiz rescored with #{@points} points."
     else
       redirect_to root_url, notice: "Sorry, you need to log in first."
     end
