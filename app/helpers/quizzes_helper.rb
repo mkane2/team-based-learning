@@ -4,7 +4,7 @@ module QuizzesHelper
     if current_user.admin? && quiz.due_date < Time.now.to_datetime
       'btn-info'
     elsif quiz.due_date < Time.now.to_datetime
-      'btn-info disabled'
+      'btn-info'
     else
       'btn-outline-info'
     end

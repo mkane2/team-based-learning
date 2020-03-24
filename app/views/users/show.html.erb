@@ -20,15 +20,7 @@
       <% @quizzes.each do |quiz| %>
           <tr>
             <td>
-              <% if quiz.due_date < Time.now %>
-                <% if quiz.attempts.where(team_id: @user.team.id, team_attempt: true).present? %>
-                  <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm btn-outline-success disabled" %>
-                <% else %>
-                  <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm btn-success" %>
-                <% end %>
-              <% else %>
-                <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm #{duedate_helper(quiz)}" %>
-              <% end %>
+              <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm btn-success" %>
             </td>
             <td>
               <strong>Due:</strong> <%= duedate(quiz) %>

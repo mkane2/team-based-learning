@@ -25,8 +25,6 @@
   <% if @attempt.team_attempt? %>
     <%= link_to "Quiz Leaderboard", leaderboard_path(@quiz), class: "btn btn-lg btn-primary" %>
     <%= link_to "View My Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-lg btn-primary" %>
-  <% elsif @quiz.due_date > Time.now %>
-    You can't take this team quiz yet.  Come back at <%= duedate(@quiz) %> to start the team quiz.
   <% else %>
     <%= link_to "Start Team Quiz", quiz_path(@quiz), class: "btn btn-lg btn-primary" %>
   <% end %>
