@@ -1,0 +1,52 @@
+<div class="card border-secondary mb-3" style="max-width: 100%; margin-top: 15px;">
+  <h4 class="card-header"><%= @quiz.name %> <small>Due: <%= duedate(@quiz) %></small></h4>
+  <div class="card-body">
+    <p class="card-text"><%= @quiz.description %></p>
+    <p><%= pluralize @quiz.questions.count, "Individual point" %> possible</p>
+    <p><%= pluralize @quiz.choices.count, "Team point" %> possible</p>
+  </div>
+</div>
+
+<h5>Order students by</h5>
+<div class="btn-group">
+    <%= link_to scores_path(@quiz.id, sort: 'lastasc'), class: "btn #{lastasc_order_helper(params[:sort])}" do %>
+      Lastname <i class='fas fa-sort-alpha-down'></i>
+    <% end %>
+    <%= link_to scores_path(@quiz.id, sort: 'lastdesc'), class: "btn #{lastdesc_order_helper(params[:sort])}" do %>
+      Lastname <i class='fas fa-sort-alpha-down-alt'></i>
+    <% end %>
+    <%= link_to scores_path(@quiz.id, sort: 'individualasc'), class: "btn #{individualasc_order_helper(params[:sort])}" do %>
+      Individual score <i class='fas fa-sort-down'></i>
+    <% end %>
+    <%= link_to scores_path(@quiz.id, sort: 'individualdesc'), class: "btn #{individualdesc_order_helper(params[:sort])}" do %>
+      Individual score <i class='fas fa-sort-up'></i>
+    <% end %>
+    <%= link_to scores_path(@quiz.id, sort: 'team'), class: "btn #{team_order_helper(params[:sort])}" do %>
+      Team <i class='fas fa-user-friends'></i>
+    <% end %>
+
+</div>
+<table class="table">
+  <tr>
+      <th>First</th>
+      <th>Last</th>
+      <th>Individual score</th>
+      <th>Team</th>
+      <th>Team score</th>
+  </tr>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.firstname %></td>
+        <td><%= student.lastname %></td>
+        <td><% if student.attempts.where(quiz_id: @quiz.id, team_attempt: false).present? %>
+            <%= link_to student.attempts.where(quiz_id: @quiz.id, team_attempt: false).first.points, show_student_path(@quiz.id, student.attempts.where(quiz_id: @quiz.id, team_attempt: false).first.id, student.id), class: "btn btn-sm btn-outline-primary" %>
+          <% end %>
+        </td>
+        <td><%= student.team.name %></td>
+        <td><% if student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).present? %>
+            <%= link_to student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).first.points, show_team_path(@quiz.id, student.team.attempts.where(quiz_id: @quiz.id, team_attempt: true).first.id, student.team.id), class: "btn btn-sm btn-outline-primary" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+</table>

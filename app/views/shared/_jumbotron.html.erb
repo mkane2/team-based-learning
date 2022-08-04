@@ -1,0 +1,32 @@
+<div class="jumbotron">
+  <% if user_signed_in? %>
+    <div class="row">
+      <div class="col-sm-11">
+        <h2><%= link_to current_user.username, dashboard_path %></h2>
+      </div>
+      <div class="col-sm-1">
+
+      </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="col-sm-11">
+          <h4>
+            <% if current_user.team.present? %>
+              <%= link_to current_user.team.name, team_path(current_user.team.name) %>
+            <% elsif current_user.admin? %>
+              <%= link_to "Super Secret Admin Dashboard", admin_dashboard_path, class: 'btn btn-primary' %>
+              <%= link_to "Create New Course", new_course_path, class: 'btn btn-primary' %>
+              <%= link_to "Create New Quiz", new_quiz_path, class: 'btn btn-primary' %>
+            <% end %>
+          </h4>
+        </div>
+        <div class="col-sm-1">
+
+        </div>
+    </div>
+  <% else %>
+    <%= link_to "Login", new_user_session_path, class: 'btn btn-primary btn-lg btn-block' %>
+  <% end %>
+</div>

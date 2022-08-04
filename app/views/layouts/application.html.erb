@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= @site_name %></title>
+    <script src="https://kit.fontawesome.com/7c2a59c613.js" crossorigin="anonymous"></script>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <%= link_to "Home", root_path, class:"navbar-brand" %>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          <% if user_signed_in? && current_user.admin? %>
+            <li class="nav-item">
+              <%= link_to "Admin", admin_dashboard_path, class: 'nav-link' %>
+            </li>
+          <% end %>
+
+          <li class="nav-item">
+            <% if user_signed_in? && current_user.team.present? %>
+              <%= link_to current_user.team.name, team_path(current_user.team.name), class: 'nav-link' %>
+            <% else %>
+              <%= link_to "Teams", teams_path, class: 'nav-link' %>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Quizzes", quizzes_path, class: 'nav-link' %>
+          </li>
+
+            <% if user_signed_in? %>
+            <li class="nav-item">
+              <%= link_to "Edit settings", edit_user_registration_path, class: 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Sign out", destroy_user_session_path, method: :delete, class: 'nav-link' %>
+            </li>
+            <% else %>
+            <li class="nav-item">
+              <%= link_to "Sign in", new_user_session_path, class: 'nav-link' %>
+            </li>
+            <% end %>
+
+        </ul>
+      </div>
+      </div>
+    </nav>
+    <div class="container">
+
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, class: "alert alert-info" %>
+      <% end %>
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

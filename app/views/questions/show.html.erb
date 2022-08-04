@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h5>
+  <strong>Quiz:</strong>
+  <%= @question.quiz.name %>
+</h5>
+
+<h4>
+  <%= @question.body %>
+</h4>
+
+<% if @question.choices.present? && current_user.admin? %>
+  <ol type="A" >
+    <% @question.choices.each do |c| %>
+      <li class="<%= 'text-success' if c.correct?%>" >
+        <%= c.choice_body %>
+      </li>
+    <% end %>
+  </ol>
+<% else %>
+  <p>
+    No answers here!
+  </p>
+<% end %>
+
+<%= link_to 'Edit', edit_question_path(@question) %> |
+<%= link_to 'Back', questions_path %>

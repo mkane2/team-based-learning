@@ -1,0 +1,42 @@
+<table class="table">
+  <tr>
+      <th>Quiz</th>
+      <th>Due date</th>
+      <th>My score</th>
+      <th>Team score</th>
+  </tr>
+    <% @quizzes.each do |quiz| %>
+        <tr>
+          <td>
+            <% if quiz.due_date < Time.now %>
+              <% if current_user.admin? || quiz.attempts.where(team_id: current_user.team.id, team_attempt: true).present? %>
+                <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm btn-outline-success" %>
+              <% else %>
+                <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm btn-success" %>
+              <% end %>
+            <% else %>
+              <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm #{duedate_helper(quiz)}" %>
+            <% end %>
+          </td>
+          <td>
+            <strong>Due:</strong> <%= duedate(quiz) %>
+          </td>
+          <td>
+            <% if quiz.attempts.where(user_id: current_user.id, team_attempt: false).present? %>
+              <%= my_results(quiz) %>
+            <% else %>
+              Not taken
+            <% end %>
+          </td>
+          <td>
+            <% if current_user.admin? %>
+              Team quiz
+            <% elsif quiz.attempts.where(team_id: current_user.team.id, team_attempt: true).present? %>
+              <%= quiz.attempts.where(team_id: current_user.team.id, team_attempt: true).first.points %> / <%= number_to_percentage quiz.attempts.where(team_id: current_user.team.id, team_attempt: true).first.points.to_f / quiz.choices.count.to_f * 100, precision: 0 %>
+            <% else %>
+              Team quiz not started
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
+</table>

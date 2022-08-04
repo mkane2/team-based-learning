@@ -1,0 +1,18 @@
+<div class="jumbotron" style="max-width: 100%; margin-top: 15px;">
+  <h4 class="display-3"><%= @quiz.name %> <small class="text-muted"><%= pluralize @quiz.choices.count, "Point" %></small></h4>
+</div>
+  <%= render partial: "leaderboard", locals: {quiz: @quiz, attempts: @attempts} %>
+
+<script>
+$(function() {
+  $(document).ready(function() {
+    setInterval(function() {
+      jQuery.ajax({
+        url: "/quizzes/<%= @quiz.id %>/leaderboard",
+        type: "GET",
+        dataType: "script"
+      });
+    }, 2000);
+  });
+});
+</script>

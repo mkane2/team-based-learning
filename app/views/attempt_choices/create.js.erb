@@ -1,0 +1,20 @@
+<% if @attempt.team_id.nil? %>
+  $(".btn-question-<%= @choice.question.id %>").addClass("btn-secondary disabled");
+  $("#btn-choice-<%= @choice.id %>").removeClass("btn-secondary btn-outline-primary btn-outline-success btn-outline-info btn-outline-warning btn-outline-danger");
+  $("#btn-choice-<%= @choice.id %>").addClass("btn-info disabled");
+<% elsif @choice.correct? %>
+  $("#points").text("<%= @attempt.points %> Points");
+  $(".btn-question-<%= @choice.question.id %>").addClass("btn-secondary disabled");
+  $("#btn-choice-<%= @choice.id %>").removeClass("btn-secondary btn-outline-primary btn-outline-success btn-outline-info btn-outline-warning btn-outline-danger");
+  $("#btn-choice-<%= @choice.id %>").addClass("btn-success disabled");
+  $(".confetti").append('<%= image_tag(correct_confetti, id: "correct-confetti", height: "500", width: "500") %>');
+  setTimeout(function(){
+    $("#correct-confetti").fadeOut(1000);
+  }, 1000);
+  setTimeout(function(){
+    $("#correct-confetti").remove();
+  }, 2000);
+<% else %>
+  $("#btn-choice-<%= @choice.id %>").addClass("btn-secondary disabled");
+  $("#points-<%= @choice.question.id %>").text("<%= team_points_possible(@choice.question) %>");
+<% end %>

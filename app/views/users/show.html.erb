@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="jumbotron col-12">
+      <h2><%= @user.username %></h2>
+      <hr />
+      <h4><%= @team.name %></h4>
+      <% if current_user.admin? %>
+        <%= link_to "Edit user", edit_user_path(@user.username) %>
+      <% end %>
+    </div>
+</div>
+<div class ="row">
+  <% if @user == current_user || current_user.admin? %>
+  <table class="table">
+    <tr>
+        <th>Quiz</th>
+        <th>Due date</th>
+        <th>My score</th>
+        <th>Team score</th>
+    </tr>
+      <% @quizzes.each do |quiz| %>
+          <tr>
+            <td>
+              <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm btn-success" %>
+            </td>
+            <td>
+              <strong>Due:</strong> <%= duedate(quiz) %>
+            </td>
+            <td>
+              <% if quiz.attempts.where(user_id: @user.id, team_attempt: false).present? %>
+                <%= my_results(quiz) %>
+              <% else %>
+                Not taken
+              <% end %>
+            </td>
+            <td>
+              <% if quiz.attempts.where(team_id: @user.team.id, team_attempt: true).present? %>
+                <%= quiz.attempts.where(team_id: @user.team.id, team_attempt: true).first.points %> / <%= number_to_percentage quiz.attempts.where(team_id: @user.team.id, team_attempt: true).first.points.to_f / quiz.choices.count.to_f * 100, precision: 0 %>
+              <% else %>
+                Team quiz not started
+              <% end %>
+            </td>
+          </tr>
+      <% end %>
+  </table>
+  <% end %>
+</div>

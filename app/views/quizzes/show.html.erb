@@ -1,0 +1,66 @@
+<div class="card border-secondary mb-3" style="max-width: 100%; margin-top: 15px;">
+  <h4 class="card-header"><%= @quiz.name %> <small>Due: <%= duedate(@quiz) %></small></h4>
+  <div class="card-body">
+    <p class="card-text"><%= @quiz.description %></p>
+  </div>
+</div>
+
+<% if @quiz.questions.exists? %>
+<div class="text-center">
+
+  <% unless current_user.admin? %>
+    <% if current_user.team.present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? %>
+      <%= link_to "View My Quiz Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-primary btn-lg" %>
+      <%= link_to "Start Team Quiz", quiz_attempts_path(@quiz.id, team: true), method: :post, class: "btn btn-primary btn-lg", data: { confirm: 'Are you sure you want to start this quiz for your team?' } %>
+    <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? == false %>
+      <%= link_to "Start Team Quiz", quiz_attempts_path(@quiz.id, team: true), method: :post, class: "btn btn-primary btn-lg", data: { confirm: 'Are you sure you want to start this quiz for your team?' } %>
+    <% elsif current_user.attempts.where(quiz_id: @quiz.id).present? && current_user.team.attempts.where(quiz_id: @quiz.id).present? %>
+      <%= link_to "View My Quiz", quiz_attempt_path(@quiz.id, current_user.attempts.first.id), class: "btn btn-primary btn-lg" %>
+    <% else %>
+      <%= link_to "Start Quiz", quiz_attempts_path(@quiz.id), method: :post, class: "btn btn-primary btn-lg" %>
+    <% end %>
+  <% end %>
+
+  <% if current_user.admin? %>
+    <%= link_to "Edit Quiz", edit_quiz_path(@quiz.id), class: "btn btn-primary btn-lg" %>
+    <%= link_to "View Scores", scores_path(@quiz.id), class: "btn btn-primary btn-lg" %>
+    <%= link_to "View Results", results_path(@quiz.id), class: "btn btn-primary btn-lg" %>
+    <%= link_to "Leaderboard", leaderboard_path(@quiz.id), class: "btn btn-primary btn-lg" %>
+  <% end %>
+
+</div>
+<% end %>
+
+<% if current_user.admin? %>
+  <hr />
+
+  <%= render "questions/form", question: @question, choice: @choice, quiz: @quiz %>
+<hr />
+  <% if @quiz.questions.exists? %>
+    <h5><%= pluralize @quiz.questions.size - 1, 'Question' %> in this quiz</h5>
+    <table class="counter-table table">
+      <tbody>
+      <ol>
+        <% @quiz.questions.each do |q| %>
+          <% unless q.body.blank? %>
+          <tr>
+            <td>
+                <%= q.body %>
+            </td>
+            <td>
+              <%= q.choices.size %> points
+            </td>
+          </tr>
+          <% end %>
+        <% end %>
+      </ol>
+      </tbody>
+    </table>
+
+  <% else %>
+    <h5>Quiz has no questions</h5>
+  <% end %>
+<hr />
+  <%= link_to 'Edit', edit_quiz_path(@quiz) %> |
+  <%= link_to 'Back', quizzes_path %>
+<% end %>

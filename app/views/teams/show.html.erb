@@ -1,0 +1,52 @@
+<p id="notice"><%= notice %></p>
+
+<div class="jumbotron">
+  <h1><%= @team.name %> <small class="text-muted"><%= @team.course.name %></small></h1>
+</div>
+
+<% if @attempts.any? %>
+<table class="table">
+  <tr>
+    <th>Quiz</th>
+    <th>My score</th>
+    <th>Team score</th>
+  </tr>
+  <% @attempts.each do |attempt| %>
+    <tr>
+      <td><%= link_to attempt.quiz.name, quiz_attempt_path(attempt.quiz, attempt, results: true), class: "btn btn-outline-secondary" %></td>
+      <td><%= Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points%> / <%= number_to_percentage Attempt.where(quiz_id: attempt.quiz.id, user_id: current_user.id, team_attempt: false).first.points.to_f / attempt.quiz.questions.count.to_f * 100, precision: 0 %></td>
+      <td><%= attempt.points %> / <%= number_to_percentage attempt.points.to_f / attempt.quiz.choices.count.to_f * 100, precision: 0 %></td>
+    </tr>
+  <% end %>
+
+</table>
+
+<% end %>
+
+<% if @team.users.any? %>
+  <table class="table-sm">
+    <tr>
+        <th>Team member</th>
+        <th>email</th>
+    </tr>
+      <% @team.users.each do |user| %>
+        <tr>
+          <td>
+            <%= link_to "#{user.firstname}", user_path(user.username) %>
+          </td>
+          <td>
+            <%= mail_to user.email %>
+          </td>
+        </tr>
+      <% end %>
+  </table>
+<% end %>
+
+<hr />
+<% if current_user.team == @team %>
+<% else %>
+<% end %></br>
+<% if current_user.admin? %>
+  <%= link_to 'Edit', edit_team_path(@team) %> |
+  <%= link_to 'Admin', admin_dashboard_path %>
+<% end %>

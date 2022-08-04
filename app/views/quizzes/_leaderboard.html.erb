@@ -1,0 +1,26 @@
+<div id="leaderboard">
+<ol>
+<% @attempts.each do |attempt| %>
+<div class="leaderboard-row <%= 'alert-secondary' if attempt.team == current_user.team %> <%= 'alert-success' if attempt.id == @attempts.first.id %>">
+  <li>
+    <div class="row">
+      <div class="col-sm-8">
+        <h5><%= attempt.team.name %></h5>
+      </div>
+      <div class="col-sm-4 text-right">
+        <% if @quiz.attempts.where(team_id: attempt.team.id).present? %>
+          <h5><%= @quiz.attempts.where(team_id: attempt.team.id).first.points %> points | <%= number_to_percentage(@quiz.attempts.where(team_id: attempt.team.id).first.points.to_f / @quiz.choices.count.to_f * 100, precision: 0) %></h5>
+        <% else %>
+          Not started
+        <% end %>
+      </div>
+    </div>
+  </li>
+    <div class="progress">
+      <div class="progress-bar <%= animation_helper(@quiz, attempt.team) %>" role="progressbar" aria-valuenow="<%= progress_helper(@quiz, attempt.team) %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress_helper(@quiz, attempt.team) %>%"></div>
+    </div>
+  </div>
+  <hr />
+<% end %>
+</ol>
+</div>

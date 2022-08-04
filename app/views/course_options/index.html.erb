@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Course Options</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Randomize questions</th>
+      <th>Randomize answers</th>
+      <th>Show all questions</th>
+      <th>Active</th>
+      <th>Duration</th>
+      <th>Course</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @course_options.each do |course_option| %>
+      <tr>
+        <td><%= course_option.randomize_questions %></td>
+        <td><%= course_option.randomize_answers %></td>
+        <td><%= course_option.show_all_questions %></td>
+        <td><%= course_option.active %></td>
+        <td><%= course_option.duration %></td>
+        <td><%= course_option.course %></td>
+        <td><%= course_option.user %></td>
+        <td><%= link_to 'Show', course_option %></td>
+        <td><%= link_to 'Edit', edit_course_option_path(course_option) %></td>
+        <td><%= link_to 'Destroy', course_option, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Course Option', new_course_option_path %>

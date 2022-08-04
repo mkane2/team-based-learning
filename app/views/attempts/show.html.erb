@@ -1,0 +1,31 @@
+<h1><%= @quiz.name %>:
+  <small class="text-muted">
+    <% if @results.present? %>
+      Results
+    <% elsif @attempt.team_attempt? %>
+      Team attempt
+    <% else %>
+      Individual attempt: You only get one chance at each question, and the system won't tell you if your selection is correct until after your team takes the quiz.  Choose wisely!
+    <% end %>
+  </small>
+</h1>
+<div class="confetti sticky-top text-center"></div>
+
+<% if @results.present? %>
+  <h3 class="alert alert-success sticky-top">My points: <%= @individual_attempt.points %> (<%= number_to_percentage @individual_attempt.points.to_f / @quiz.questions.count.to_f * 100, precision: 0 %>)<% if @team_attempt.present? %> | Team points: <%= @team_attempt.points %> (<%= number_to_percentage @team_attempt.points.to_f / @points_possible.to_f * 100, precision: 0 %> )<% end %></h3>
+<% elsif @attempt.team_attempt? %>
+  <h3 id="points" class="alert alert-success sticky-top"><%= pluralize @attempt.points, 'Points' %></h3>
+<% else %>
+  <h3 class="alert alert-success sticky-top"><%= pluralize @attempt.quiz.questions.count, 'Points' %> possible</h3>
+<% end %>
+
+<%= render 'form', attempt: @attempt %>
+
+<div class="text-center">
+  <% if @attempt.team_attempt? %>
+    <%= link_to "Quiz Leaderboard", leaderboard_path(@quiz), class: "btn btn-lg btn-primary" %>
+    <%= link_to "View My Results", quiz_attempt_path(@quiz.id, current_user.team.attempts.first.id, results: true), class: "btn btn-lg btn-primary" %>
+  <% else %>
+    <%= link_to "Start Team Quiz", quiz_path(@quiz), class: "btn btn-lg btn-primary" %>
+  <% end %>
+</div>

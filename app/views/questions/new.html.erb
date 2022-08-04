@@ -1,0 +1,53 @@
+<h1>New Question</h1>
+
+<%= form_with(model: [@question.choices.build, @question], url: questions_path, local: true) do |form| %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+      <ul>
+      <% @question.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if controller_name.eql? "quizzes" %>
+    <%= form.hidden_field :quiz_id, value: @quiz.id %>
+  <% else %>
+    <div class="field">
+      <div class="field">
+        <div class="form-group">
+          <label class="col-form-label col-form-label-lg" for="question_quiz"><%= form.label :quiz %></label>
+          <%= form.select :quiz_id, id: :question_quiz, class: 'form-control' do %>
+          <% @quizzes.each do |c| %>
+            <%= content_tag(:option, c.name, value: c.id) %>
+          <% end %>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <div class="form-group">
+      <label class="col-form-label col-form-label-lg"><%= form.label "Question" %></label>
+      <%= form.text_area :body, id: :question_body, class: "form-control form-control-lg" %>
+    </div>
+  </div>
+
+  <%= form.fields_for :choices, @question.choices.build do |choice| %>
+    <%= render "quizzes/choice_fields", form: choice %>
+  <% end %>
+  <div class="links" >
+    <%= link_to_add_association "+ add choice", form, :choices, form_name: 'form', partial: "quizzes/choice_fields", class: "btn btn-sm btn-outline-info" %>
+  </div>
+
+  <div class="actions text-center">
+    <%= form.submit class: "btn btn-lg btn-primary" %>
+  </div>
+
+<% end %>
+
+<%= link_to 'Back', questions_path %>

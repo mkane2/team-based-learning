@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @choice.choice_body %>
+</p>
+
+<p>
+  <strong>Quiz:</strong>
+  <%= @choice.quiz %>
+</p>
+
+<% unless current_user.admin? %>
+<%= link_to 'Edit', edit_choice_path(@choice) %> |
+<%= link_to 'Back', choices_path %>
+<% end %>

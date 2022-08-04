@@ -1,0 +1,39 @@
+// Place all the styles related to the Attemtps controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.btn-answer {
+  position:relative;
+    padding-top:20px;
+    // display:inline-block !important;
+    float: left;
+    margin-top: 5px;
+    max-width: 100%;
+    padding-left: 40px !important;
+    white-space: normal;
+    text-align: left !important;
+    margin-left: 15px !important;
+  // overflow: visible;
+  // position: relative !important;
+  // display: inline-block;
+}
+
+.response-wrapper {
+  position:relative;
+  float: left;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+.response {
+    position: absolute;
+    left:10px;
+    top:10px;
+  // top: 10px !important;
+  // right: -20px !important;
+  // position: absolute !important;
+    z-index: 100;
+    font-weight: bold !important;
+    font-size: .9rem !important;
+}

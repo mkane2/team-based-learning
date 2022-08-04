@@ -1,0 +1,36 @@
+<%= render partial: "shared/jumbotron" %>
+
+<% if user_signed_in? %>
+  <% if current_user.admin? %>
+    <% if current_user.courses.any? %>
+      <ul class="list-group">
+        <li class="list-group-item">My courses</li>
+        <% current_user.courses.each do |course| %>
+          <li class="list-group-item"><%= link_to course.name, course_path(course) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    <table class="table">
+      <tr>
+          <th>Quiz</th>
+          <th>Due date</th>
+      </tr>
+        <% @quizzes.each do |quiz| %>
+            <tr>
+              <td>
+                <%= link_to quiz.name, quiz_path(quiz.id), class: "btn btn-sm #{duedate_helper(quiz)}" %>
+              </td>
+              <td>
+                <strong>Due:</strong> <%= duedate(quiz) %>
+              </td>
+            </tr>
+        <% end %>
+    </table>
+  <% else %>
+    <%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>
+  <% end %>
+  <hr />
+  <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+<% else %>
+
+<% end %>

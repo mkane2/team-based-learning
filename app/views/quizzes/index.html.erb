@@ -1,0 +1,4 @@
+<h1>Quizzes</h1>
+<%= link_to 'New Quiz', new_quiz_path, class: "btn btn-primary" if current_user.admin? %>
+
+<%= render partial: "shared/user_dash", locals: {quizzes: @quizzes} %>

@@ -1,0 +1,65 @@
+<%= form_with(model: [@quiz, attempt], local: true) do |form| %>
+  <% if attempt.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(attempt.errors.count, "error") %> prohibited this attempt from being saved:</h2>
+
+      <ul>
+      <% attempt.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <ol type="1">
+    <% @quiz.questions.each do |q| %>
+    <div class="row">
+      <div class="col-lg-10 col-xs-12">
+        <li class="h5"><%= q.body %></li>
+        <ol type="A" class="nowrap">
+
+          <%= render partial: "quizzes/choices", locals: {q: q, attempt: attempt} %>
+
+        </ol>
+      </div>
+
+      <% if @results.present? || attempt.team_attempt? == false %>
+      <div class="col-md-1 individual alert alert-secondary d-none d-sm-none d-md-none d-lg-block">
+        <% if @results.present? && %>
+          My Points <hr />
+          <%= individual_points(q) %>
+        <% elsif attempt.team_attempt? == false %>
+          Points possible <hr />
+          <p id="individual-points-<%= q.id %>">
+            1
+          </p>
+        <% end %>
+      </div>
+      <% end %>
+
+      <% if @results.present? || attempt.team_attempt? %>
+      <div class="col-md-1 team alert alert-primary d-none d-sm-none d-md-none d-lg-block">
+        <% if @results.present? %>
+          Team Points <hr />
+          <%= team_points(q) %>
+        <% elsif attempt.team_attempt? %>
+          Points possible <hr />
+          <p id="points-<%= q.id %>">
+            <%= team_points_possible(q) %>
+          </p>
+        <% end %>
+      </div>
+      <% end %>
+
+    </div>
+
+      <hr />
+    <% end %>
+    </ol>
+  </div>
+
+  <!-- <div class="actions">
+    <%= form.submit 'Submit quiz', class: "btn btn-primary btn-lg" %>
+  </div> -->
+<% end %>

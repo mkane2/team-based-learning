@@ -1,0 +1,35 @@
+<h1><%= @quiz.name %>:
+  <small class="text-muted">
+    <%= @student.username %> individual results
+  </small>
+</h1>
+
+<h3 class="alert alert-success sticky-top"><%= @attempt.points %> correct | <%= pluralize @attempt.quiz.questions.count, 'Points' %> possible <%= link_to "Rescore", rescore_path(@attempt.id), class: "btn btn-secondary btn-lg" %></h3>
+
+  <div class="field">
+    <ol type="1">
+    <% @quiz.questions.each do |q| %>
+    <div class="row">
+      <div class="col-lg-10 col-xs-12">
+        <li class="h5"><%= q.body %></li>
+        <% if q.attempt_choices.where(user_id: @student.id, team_id: nil).count > 1 %>
+          <span class="alert-danger">This question has <%= pluralize q.attempt_choices.where(user_id: @student.id, team_id: nil).count, "attempt" %>.  <%= link_to "Delete?", view_attempt_choices_path(q.id, @student.id) %></span>
+        <% end %>
+        <ol type="A" class="nowrap">
+
+          <% q.choices.each do |c, index| %>
+            <div class="response-wrapper">
+                <%= admin_helper(c, @student) %>
+                <li id="btn-choice-<%=c.id%>" class="btn btn-lg btn-answer <%= admin_correct_class(c, @attempt) %> btn-question-<%=q.id%>"><%= c.choice_body %></li>
+              </div>
+          <% end %>
+
+        </ol>
+      </div>
+
+    </div>
+
+      <hr />
+    <% end %>
+    </ol>
+  </div>

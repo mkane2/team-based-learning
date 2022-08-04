@@ -1,0 +1,20 @@
+// Place all the styles related to the AttemptChoices controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.confetti {
+  // display: block;
+  // margin-left: auto;
+  // margin-right: auto;
+  width: 50%;
+  height: 0px;
+  overflow: visible;
+  img {
+    position: absolute;
+  }
+}
+
+.btn-answer {
+  white-space: nowrap;
+  overflow-x: auto;
+}

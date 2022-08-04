@@ -1,0 +1,39 @@
+<div class="jumbotron" style="max-width: 100%; margin-top: 15px;">
+  <h4 class="display-3"><%= @quiz.name %> <small class="text-muted"><%= pluralize @quiz.choices.count, "Point" %></small></h4>
+</div>
+<ol>
+<% @questions.each do |q| %>
+  <li>
+    <%= q.body %>
+  </li>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>
+
+        </td>
+        <th>
+          I
+        </th>
+        <th>
+          T
+        </th>
+      </tr>
+    <% q.choices.each do |c| %>
+      <tr class="<%= 'table-success' if c.correct? %> <%= results_warning_helper(c) %>">
+        <td>
+          <%= c.choice_body %>
+        </td>
+        <td>
+          <%= c.attempt_choices.where(team_id: nil).count %>
+        </td>
+        <td>
+          <%= c.attempt_choices.where.not(team_id: nil).count %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <hr />
+<% end %>
+</ol>

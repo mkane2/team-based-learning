@@ -1,0 +1,16 @@
+<% q.choices.each_with_index do |c, index| %>
+  <% if attempt.team_attempt? && q.attempt_choices.where(team_id: current_user.team.id).any? %>
+    <div class="response-wrapper">
+      <%= results_helper(c) if @results.present? %>
+      <li id="btn-choice-<%=c.id%>" class="btn btn-lg btn-answer <%= correct_class(c, attempt) %> disabled btn-question-<%=q.id%>"><%= c.choice_body %></li>
+    </div>
+  <% elsif attempt.team_attempt? %>
+    <%= link_to "<li>#{c.choice_body}</li>".html_safe, attempt_choices_path(attempt_id: attempt.id, user_id: current_user.id, question_id: q.id, choice_id: c.id, team_id: current_user.team.id), id: "btn-choice-#{c.id}", class: "btn btn-lg btn-answer #{outline_button[index]} btn-question-#{q.id} btn-team",remote: true, method: :post%>
+  <% elsif attempt.team_attempt == false && q.attempt_choices.where(user_id: current_user.id).where(team_id: nil).any? %>
+    <li id="btn-choice-<%=c.id%>" class="btn btn-lg btn-answer <%= correct_class(c, attempt) %> disabled btn-question-<%=q.id%>"><%= c.choice_body %></li>
+  <% elsif current_user.team.present? && c.attempt_choices.where(team_id: current_user.team.id).present? %>
+    <li id="btn-choice-<%=c.id%>" class="btn btn-lg btn-answer <%= correct_class(c, attempt) %> disabled btn-question-<%=q.id%>"><%= c.choice_body %></li>
+  <% else %>
+    <%= link_to "<li>#{c.choice_body}</li>".html_safe, attempt_choices_path(attempt_id: attempt.id, user_id: current_user.id, question_id: q.id, choice_id: c.id), id: "btn-choice-#{c.id}", class: "btn btn-lg btn-answer #{outline_button[index]} btn-question-#{q.id}",remote: true, method: :post%>
+  <% end %>
+<% end %>

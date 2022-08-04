@@ -1,0 +1,34 @@
+<h1><%= @question.quiz.name %>:
+  <small class="text-muted">
+    <%= link_to @team.name, show_team_path(@question.quiz.id, @attempt.id, @team.id) %>
+  </small>
+</h1>
+
+  <div class="field">
+
+    <div class="row">
+      <div class="col-lg-10 col-xs-12">
+        <h5><%= @question.body %></h5>
+
+        <ol type="A" class="nowrap">
+
+          <% @question.choices.each do |c, index| %>
+                <li><span class="<%= admin_correct_class(c, @attempt) %>"><%= c.choice_body %></span></li>
+              <ul><% c.attempt_choices.where(team_id: @team.id).order(created_at: :asc).each do |attempt| %>
+                  <li>
+                    <span class="<%='bg-info text-light' if attempt == @question.attempt_choices.where(team_id: @team.id).order(created_at: :asc).first %>">
+                      <%= attempt.user.firstname %>: <%= attempt.created_at.strftime("%r") %> | <%= link_to 'Delete?', attempt_choice_path(attempt.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+                    </span>
+                  </li>
+              <% end %></ul>
+              </hr>
+          <% end %>
+
+        </ol>
+      </div>
+
+    </div>
+
+      <hr />
+
+  </div>

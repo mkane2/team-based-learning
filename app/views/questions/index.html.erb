@@ -1,0 +1,22 @@
+<br />
+<h1>Questions in this quiz</h1>
+
+<%= link_to 'Add New Question', new_question_path, class: "btn btn-lg btn-primary" %>
+<br />
+    <% @questions.each_with_index do |question, index| %>
+        <br />
+        <div class="card">
+          <div class="card-header">
+            <%= index +1 %>. <%= question.body %>
+          </div>
+          <div class="card-body">
+              <% question.choices.each_with_index do |choice, index| %>
+                <p class="<%= 'text-success' if choice.correct? %>"><%= index +1 %>. <%= choice.choice_body %></p>
+              <% end %>
+            <%= link_to 'Show', question, class: "btn btn-sm btn-info" %>
+            <%= link_to 'Edit', edit_question_path(question), class: "btn btn-sm btn-info" %>
+            <%= link_to 'Destroy', question, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-info" %>
+          </div>
+        </div>
+    <% end %>
+<br />
